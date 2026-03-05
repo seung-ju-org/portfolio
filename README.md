@@ -1,54 +1,158 @@
-# Portfolio (Next.js + Tailwind + shadcn/ui)
+# Seung Ju Portfolio
 
-방문자용 포트폴리오 사이트입니다. 관리자 기능(CMS)은 별도 앱으로 분리하는 전제를 두고, 현재는 공개 사이트 UI를 먼저 구성했습니다.
+Next.js App Router 기반 포트폴리오 웹사이트입니다.  
+방문자용 사이트를 우선 구축했고, Portfolio/Career 데이터는 DB + GraphQL + Relay로 동작합니다.
 
-## Stack
+## 주요 기능
 
-- Next.js (App Router)
+- 다국어: `ko`, `en`, `ja`
+- 테마: `light`, `system`, `dark` (쿠키 기반 유지)
+- 페이지: Home / About Me / Portfolio / Contact Me
+- Portfolio:
+  - PostgreSQL 저장 데이터 조회
+  - GraphQL API(`/api/graphql`) + Relay 클라이언트
+  - 커서 기반 무한 스크롤
+  - Redis 캐시
+- Career:
+  - DB 저장 데이터 기반 다국어 조회
+- Contact:
+  - 메일 전송 API(`/api/contact`)
+- Sentry:
+  - App/Server/Edge 에러 수집 + 소스맵 업로드
+- 배포:
+  - Docker(standalone) + Helm + ArgoCD
+- CI:
+  - Jenkinsfile + Kaniko 빌드/푸시 + GitOps 태그 업데이트
+
+## 기술 스택
+
+- Next.js 16.1.6 (App Router)
+- React / React DOM
 - TypeScript
-- Tailwind CSS
-- shadcn/ui 스타일 컴포넌트 구조 (`components.json`, `src/components/ui/*`)
+- Tailwind CSS + shadcn/ui
+- Prisma + PostgreSQL
+- GraphQL Yoga + Relay Runtime
+- Redis (ioredis)
+- Sentry
+- Vitest + Testing Library
 
-## Local Run (pnpm)
+## 프로젝트 구조
+
+- `src/app`: 라우팅, 페이지, API 라우트
+- `src/components/portfolio`: 포트폴리오 UI 컴포넌트
+- `src/lib`: i18n, repository, graphql schema, env, util
+- `prisma`: schema, seed
+- `helm/portfolio`: Kubernetes Helm chart
+- `deploy`: ArgoCD Application 매니페스트
+- `Jenkinsfile`: Jenkins CI 파이프라인 (Kaniko)
+
+## 로컬 실행 (pnpm)
 
 ```bash
 pnpm install
+pnpm prisma:generate
 pnpm dev
 ```
 
-## Structure
+- 개발 서버: `http://localhost:3000`
 
-- `src/app/page.tsx`: 랜딩 페이지
-- `src/components/portfolio/*`: 섹션 단위 컴포넌트
-- `src/components/ui/*`: shadcn 스타일 베이스 UI
-- `src/lib/utils.ts`: `cn` 유틸
+## 환경 변수
 
-## Next Steps
+기본 템플릿은 `.env.example`을 참고하세요.
 
-- 관리자 앱을 별도 저장소/서브앱으로 구축 후 API 연동
-- 프로젝트/스킬/연락처 데이터를 CMS 또는 JSON 소스로 분리
-- `pnpm dlx shadcn@latest add ...`로 필요한 UI 컴포넌트 추가
+핵심 변수:
 
-## Deployment (Docker + Helm + ArgoCD)
+- `DATABASE_URL`
+- `REDIS_HOST`
+- `REDIS_PORT`
+- `REDIS_PASSWORD`
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_DOMAIN`, `SMTP_PROTOCOL`
+- `CONTACT_FROM_EMAIL`, `CONTACT_TO_EMAIL`
+- `NEXT_PUBLIC_SENTRY_DSN`
+- `SENTRY_DSN`
+- `SENTRY_AUTH_TOKEN` (빌드 소스맵 업로드)
 
-### 1) Build & Push Image
+## DB/캐시
+
+- ORM: Prisma
+- RDB: PostgreSQL
+- Cache: Redis
+- Portfolio/Career 데이터는 DB 기준으로 조회됩니다.
+
+마이그레이션/시드:
 
 ```bash
-docker build -t ghcr.io/seung-ju/portfolio:latest .
-docker push ghcr.io/seung-ju/portfolio:latest
+pnpm prisma:generate
+pnpm prisma:push
+pnpm prisma:seed
 ```
 
-### 2) Helm Render Test
+## 테스트/품질
 
 ```bash
-helm template portfolio ./helm/portfolio \
-  -f ./helm/portfolio/values-prod.yaml
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm test:coverage
 ```
 
-### 3) ArgoCD Application
+현재 기준:
 
-`deploy/argocd-application.yaml`의 `repoURL`, `targetRevision`, `namespace`를 환경에 맞게 수정 후 적용:
+- 테스트 통과
+- lint/typecheck 통과
+- coverage threshold 적용 (`vitest.config.ts`)
+
+## Sentry
+
+- 설정 파일:
+  - `src/instrumentation-client.ts`
+  - `sentry.server.config.ts`
+  - `sentry.edge.config.ts`
+- 토큰 파일:
+  - `.env.sentry-build-plugin` (git 제외)
+- Jenkins/Kaniko 빌드 시 `SENTRY_AUTH_TOKEN` build-arg 전달
+
+## CI/CD
+
+### Jenkins (Kaniko)
+
+파이프라인 파일:
+
+- `Jenkinsfile`
+
+필수 Jenkins Credentials:
+
+- `ghcr-credentials` (GHCR push)
+- `git-push-credentials` (repo push)
+- `sentry-auth-token` (Sentry 소스맵 업로드)
+
+동작:
+
+1. `pnpm install/lint/test/build`
+2. Kaniko 이미지 빌드/푸시 (`ghcr.io/seung-ju/portfolio`)
+3. `helm/portfolio/values-prod.yaml`의 `image.tag` 갱신 커밋
+4. ArgoCD 자동 동기화
+
+### Helm / ArgoCD
+
+렌더 테스트:
+
+```bash
+helm template portfolio ./helm/portfolio -f ./helm/portfolio/values-prod.yaml
+```
+
+ArgoCD 앱 배포:
 
 ```bash
 kubectl apply -f deploy/argocd-application.yaml
 ```
+
+Ingress host:
+
+- `portfolio.seung-ju.com`
+
+## 운영 메모
+
+- GitHub 원격: `git@github.com:seung-ju-org/portfolio.git`
+- 기본 브랜치: `main`
+- Node 패키지 매니저: `pnpm` (lockfile 포함)
