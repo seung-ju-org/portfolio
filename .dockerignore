@@ -1,0 +1,14 @@
+.git
+.gitignore
+.next
+node_modules
+coverage
+dist
+Dockerfile*
+helm
+*.log
+.DS_Store
+.env
+.env.local
+.env.*.local
+.env.sentry-build-plugin

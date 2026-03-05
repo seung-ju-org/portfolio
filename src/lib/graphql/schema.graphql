@@ -1,0 +1,49 @@
+enum Locale {
+  KO
+  EN
+  JA
+}
+
+type ProjectLink {
+  label: String!
+  url: String!
+}
+
+type Project {
+  id: ID!
+  title: String!
+  company: String
+  period: String!
+  role: String!
+  achievements: [String!]!
+  stack: String!
+  links: [ProjectLink!]!
+}
+
+type Query {
+  projects(locale: Locale = KO): [Project!]!
+  projectsConnection(locale: Locale = KO, first: Int = 8, after: String): ProjectConnection!
+  projectCount: Int!
+}
+
+type ProjectEdge {
+  cursor: String!
+  node: Project!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type ProjectConnection {
+  edges: [ProjectEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+schema {
+  query: Query
+}

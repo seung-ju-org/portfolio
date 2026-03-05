@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Locale {
+  KO
+  EN
+  JA
+}
+
+model Project {
+  id           String               @id @db.Uuid
+  slug         String               @unique
+  displayOrder Int                  @default(0)
+  startDate    DateTime
+  endDate      DateTime?
+  isOngoing    Boolean              @default(false)
+  links        Json?
+  isPublished  Boolean              @default(true)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  translations ProjectTranslation[]
+  technologies ProjectTechnology[]
+}
+
+model ProjectTranslation {
+  id           Int      @id @default(autoincrement())
+  projectId    String   @db.Uuid
+  locale       Locale
+  title        String
+  company      String?
+  role         String
+  achievements Json
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, locale])
+  @@index([locale])
+}
+
+model Technology {
+  id        String              @id @default(uuid()) @db.Uuid
+  name      String              @unique
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  projects  ProjectTechnology[]
+}
+
+model ProjectTechnology {
+  projectId    String   @db.Uuid
+  technologyId String   @db.Uuid
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  project    Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  technology Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, technologyId])
+  @@index([technologyId])
+}
+
+model Career {
+  id           String   @id @default(uuid()) @db.Uuid
+  slug         String   @unique
+  company      String
+  position     String
+  overview     String
+  startDate    DateTime
+  endDate      DateTime?
+  isOngoing    Boolean  @default(false)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  translations CareerTranslation[]
+}
+
+model CareerTranslation {
+  id        Int      @id @default(autoincrement())
+  careerId  String   @db.Uuid
+  locale    Locale
+  company   String
+  position  String
+  overview  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  career Career @relation(fields: [careerId], references: [id], onDelete: Cascade)
+
+  @@unique([careerId, locale])
+  @@index([locale])
+}

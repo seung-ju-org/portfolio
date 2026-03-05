@@ -1,0 +1,31 @@
+replicaCount: 2
+
+image:
+  repository: ghcr.io/seung-ju/portfolio
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-route53"
+  hosts:
+    - host: portfolio.seung-ju.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: portfolio-seungju-tls
+      hosts:
+        - portfolio.seung-ju.com
+
+env:
+  NODE_ENV: production
+  NEXT_PUBLIC_SITE_URL: "https://portfolio.seung-ju.com"
+  REDIS_HOST: "redis-master.redis.svc"
+  REDIS_PORT: "6379"
+
+secretEnv:
+  DATABASE_URL: "postgresql://seungju:seungju@postgresql-primary.postgresql.svc:5432/seungju?schema=portfolio"
+  REDIS_PASSWORD: "change-me"
