@@ -1,9 +1,9 @@
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: ghcr.io/seung-ju-org/portfolio
   pullPolicy: IfNotPresent
-  tag: "main-6-46bd7df"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -74,7 +74,7 @@ readinessProbe:
 
 autoscaling:
   enabled: false
-  minReplicas: 2
+  minReplicas: 1
   maxReplicas: 5
   targetCPUUtilizationPercentage: 75
 
