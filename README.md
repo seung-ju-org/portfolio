@@ -127,7 +127,7 @@ pnpm test:coverage
 동작:
 
 1. `pnpm install/lint/typecheck/test/build`
-2. Docker Buildx 이미지 빌드/푸시 (`ghcr.io/seung-ju/portfolio`)
+2. Docker Buildx 이미지 빌드/푸시 (`ghcr.io/seung-ju-org/portfolio`)
 3. `helm/portfolio/values.yaml`의 `image.tag` 갱신 커밋
 4. ArgoCD 자동 동기화
 
