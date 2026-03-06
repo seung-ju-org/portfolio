@@ -13,6 +13,11 @@ enum Locale {
   JA
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 model Project {
   id           String               @id @db.Uuid
   slug         String               @unique
@@ -95,4 +100,16 @@ model CareerTranslation {
 
   @@unique([careerId, locale])
   @@index([locale])
+}
+
+model User {
+  id           String    @id
+  username     String    @unique
+  passwordHash String
+  role         Role      @default(USER)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime
+  name         String?
+  email        String?   @unique
+  deletedAt    DateTime?
 }
