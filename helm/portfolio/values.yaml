@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: ghcr.io/seung-ju-org/portfolio
   pullPolicy: IfNotPresent
-  tag: "main-24-21ab212"
+  tag: "main-29-4bf50e6"
 
 imagePullSecrets: []
 nameOverride: ""
