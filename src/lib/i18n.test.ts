@@ -1,4 +1,4 @@
-import { defaultLocale, getMessages, isLocale, locales, withLocale } from "@/lib/i18n";
+import { defaultLocale, getLocaleFromPathname, getMessages, isLocale, locales, withLocale } from "@/lib/i18n";
 
 describe("i18n", () => {
   it("exports expected locales", () => {
@@ -23,5 +23,12 @@ describe("i18n", () => {
     expect(getMessages("ko").hero.coverageValue).toContain("Design");
     expect(getMessages("en").hero.coverageValue).toContain("Design");
     expect(getMessages("ja").hero.coverageValue).toContain("Design");
+  });
+
+  it("resolves locale from pathname", () => {
+    expect(getLocaleFromPathname("/ja/about")).toBe("ja");
+    expect(getLocaleFromPathname("/en")).toBe("en");
+    expect(getLocaleFromPathname("/unknown/path")).toBe("ko");
+    expect(getLocaleFromPathname(undefined)).toBe("ko");
   });
 });

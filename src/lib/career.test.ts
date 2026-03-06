@@ -14,7 +14,7 @@ describe("career", () => {
   });
 
   it("builds localized period and experience label", async () => {
-    getCareerHistoryFromDb.mockResolvedValueOnce([
+    getCareerHistoryFromDb.mockResolvedValue([
       {
         company: "Actbase LLC",
         position: "Lead",
@@ -57,16 +57,16 @@ describe("career", () => {
     expect(ja.items[0].period).toContain("現在");
   });
 
-  it("falls back to local career history when db returns empty or throws", async () => {
+  it("returns empty items when db returns empty", async () => {
     getCareerHistoryFromDb.mockResolvedValueOnce([]);
-    const fromEmpty = await getAboutCareer("ko");
+    const result = await getAboutCareer("ko");
 
+    expect(result.items).toEqual([]);
+    expect(result.experienceLabel).toBeNull();
+  });
+
+  it("throws when db query fails", async () => {
     getCareerHistoryFromDb.mockRejectedValueOnce(new Error("db down"));
-    const fromError = await getAboutCareer("ko");
-
-    expect(fromEmpty.items.length).toBeGreaterThan(0);
-    expect(fromError.items.length).toBeGreaterThan(0);
-    expect(fromEmpty.experienceLabel).toContain("총 경력:");
-    expect(fromError.experienceLabel).toContain("총 경력:");
+    await expect(getAboutCareer("ko")).rejects.toThrow("db down");
   });
 });

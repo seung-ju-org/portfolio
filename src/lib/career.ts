@@ -1,5 +1,4 @@
 import type { Locale } from "@/lib/i18n";
-import { careerHistory } from "@/lib/career-history";
 
 type CareerRecord = {
   company: string;
@@ -15,38 +14,6 @@ export type AboutCareerItem = {
   position: string;
   period: string;
 };
-
-function toUtcMonthDate(year: number, month: number) {
-  return new Date(Date.UTC(year, month - 1, 1));
-}
-
-function parseCareerPeriod(period: string) {
-  const matches = [...period.matchAll(/(\d{4})\.(\d{2})/g)];
-  if (!matches.length) return null;
-
-  const startDate = toUtcMonthDate(Number(matches[0][1]), Number(matches[0][2]));
-  const isOngoing = period.includes("현재") || period.includes("진행중");
-  const endDate = !isOngoing && matches.length >= 2 ? toUtcMonthDate(Number(matches[1][1]), Number(matches[1][2])) : null;
-
-  return { startDate, endDate, isOngoing };
-}
-
-function toFallbackRecords(): CareerRecord[] {
-  return careerHistory
-    .map((item, index) => {
-      const parsed = parseCareerPeriod(item.period);
-      if (!parsed) return null;
-      return {
-        company: item.company,
-        position: item.position,
-        startDate: parsed.startDate,
-        endDate: parsed.endDate,
-        isOngoing: parsed.isOngoing,
-        displayOrder: index + 1
-      };
-    })
-    .filter((item): item is CareerRecord => !!item);
-}
 
 function formatPeriodDate(date: Date, locale: Locale) {
   const year = date.getUTCFullYear();
@@ -84,17 +51,13 @@ function buildExperienceLabel(records: CareerRecord[], locale: Locale) {
 }
 
 async function getCareerRecords(locale: Locale): Promise<CareerRecord[]> {
-  try {
-    const { getCareerHistoryFromDb } = await import("./career-repository");
-    const records = await getCareerHistoryFromDb(locale);
-    if (!records.length) return toFallbackRecords();
-    return records;
-  } catch {
-    return toFallbackRecords();
-  }
+  const { getCareerHistoryFromDb } = await import("./career-repository");
+  return getCareerHistoryFromDb(locale);
 }
 
-export async function getAboutCareer(locale: Locale): Promise<{ experienceLabel: string | null; items: AboutCareerItem[] }> {
+export async function getAboutCareer(
+  locale: Locale
+): Promise<{ experienceLabel: string | null; items: AboutCareerItem[] }> {
   const records = await getCareerRecords(locale);
   const sorted = [...records].sort((a, b) => a.displayOrder - b.displayOrder);
 
