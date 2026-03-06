@@ -12,15 +12,18 @@ function hasLocalePrefix(pathname: string) {
 
 export function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
+  const currentCookieLocale = request.cookies.get(LOCALE_COOKIE_NAME)?.value ?? null;
 
   if (hasLocalePrefix(pathname)) {
     const [locale] = pathname.split("/").filter(Boolean);
     const response = NextResponse.next();
-    response.cookies.set(LOCALE_COOKIE_NAME, locale, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: "lax"
-    });
+    if (currentCookieLocale !== locale) {
+      response.cookies.set(LOCALE_COOKIE_NAME, locale, {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365,
+        sameSite: "lax"
+      });
+    }
     return response;
   }
 
@@ -29,7 +32,7 @@ export function middleware(request: NextRequest) {
   }
 
   const preferredLocale = detectPreferredLocale({
-    cookieLocale: request.cookies.get(LOCALE_COOKIE_NAME)?.value,
+    cookieLocale: currentCookieLocale,
     countryCode:
       request.headers.get("x-vercel-ip-country") ??
       request.headers.get("cf-ipcountry") ??
