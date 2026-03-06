@@ -88,7 +88,11 @@ env:
   NEXT_PUBLIC_SITE_URL: "https://portfolio.seung-ju.com"
   REDIS_HOST: "redis-master.redis.svc"
   REDIS_PORT: "6379"
+  NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE: "0.1"
+  SENTRY_TRACES_SAMPLE_RATE: "0.1"
 
 secretEnv:
   DATABASE_URL: "postgresql://<username>:<password>@postgresql-primary.postgresql.svc:5432/<database>?schema=portfolio"
   REDIS_PASSWORD: "<redis-password>"
+  SENTRY_DSN: ""
+  NEXT_PUBLIC_SENTRY_DSN: ""
