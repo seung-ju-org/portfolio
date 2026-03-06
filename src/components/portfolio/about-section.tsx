@@ -16,7 +16,9 @@ export function AboutSection({ locale = "ko", careerItems, experienceLabel }: Ab
     <section className="container py-14 md:py-20" id="about">
       <div className="mx-auto max-w-6xl space-y-5 break-keep text-muted-foreground">
         <h2 className="text-2xl font-bold !leading-[1.35] text-foreground">{t.about.title}</h2>
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground/80">{t.about.summaryLabel}</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground/80">
+          {t.about.summaryLabel}
+        </p>
         <p className="text-sm">{t.about.role}</p>
         <div className="space-y-1 text-sm">
           <p>{experienceLabel ?? t.about.exp}</p>
@@ -24,28 +26,36 @@ export function AboutSection({ locale = "ko", careerItems, experienceLabel }: Ab
         </div>
         <p className="font-semibold text-foreground">{t.about.coreTitle}</p>
         <p className="text-sm">
-          Next.js, React, TypeScript, React Native, Java, Kotlin, Spring Boot, NestJS, Express, PostgreSQL, MySQL, Redis, AWS,
-          Kubernetes, Helm
+          Next.js, React, TypeScript, React Native, Java, Kotlin, Spring Boot, NestJS, Express, PostgreSQL, MySQL,
+          Redis, AWS, Kubernetes, Helm
         </p>
 
         <div className="my-2 flex items-center gap-3">
           <div className="h-px flex-1 bg-border" />
-          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground/80">{t.about.careerLabel ?? "Career"}</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground/80">
+            {t.about.careerLabel ?? "Career"}
+          </span>
           <div className="h-px flex-1 bg-border" />
         </div>
         <div className="space-y-3">
           {careerItems.map((career, index) => (
-            <Reveal className="space-y-1 text-sm" delay={(index % 6) * 0.03} key={`${career.company}-${career.period}`}>
-              <p className="font-semibold text-foreground">{career.company}</p>
-              <p>{career.position}</p>
-              <p className="text-muted-foreground">{career.period}</p>
+            <Reveal
+              className="interactive-card space-y-1 rounded-xl border bg-card/60 p-4 text-sm leading-relaxed md:p-5"
+              delay={(index % 6) * 0.03}
+              key={`${career.company}-${career.period}`}
+            >
+              <p className="break-words font-semibold text-foreground">{career.company}</p>
+              <p className="break-words">{career.position}</p>
+              <p className="break-words text-muted-foreground">{career.period}</p>
             </Reveal>
           ))}
         </div>
 
         <div className="my-2 flex items-center gap-3">
           <div className="h-px flex-1 bg-border" />
-          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground/80">{t.about.essayLabel}</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground/80">
+            {t.about.essayLabel}
+          </span>
           <div className="h-px flex-1 bg-border" />
         </div>
 

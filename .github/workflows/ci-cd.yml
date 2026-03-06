@@ -2,9 +2,9 @@ name: CI/CD
 
 on:
   pull_request:
-    branches: [main]
+    branches: ["**"]
   push:
-    branches: [main]
+    branches: ["**"]
     paths-ignore:
       - "helm/portfolio/values.yaml"
   workflow_dispatch:
