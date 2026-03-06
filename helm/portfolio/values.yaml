@@ -86,9 +86,20 @@ affinity: {}
 env:
   NODE_ENV: production
   NEXT_PUBLIC_SITE_URL: "https://portfolio.seung-ju.com"
+  DATABASE_URL: "postgresql://<username>:<password>@postgresql-primary.postgresql.svc:5432/<database>?schema=portfolio"
   REDIS_HOST: "redis-master.redis.svc"
   REDIS_PORT: "6379"
-
-secretEnv:
-  DATABASE_URL: "postgresql://<username>:<password>@postgresql-primary.postgresql.svc:5432/<database>?schema=portfolio"
   REDIS_PASSWORD: "<redis-password>"
+  SMTP_HOST: "smtp.example.com"
+  SMTP_PORT: "587"
+  SMTP_USER: "smtp-user"
+  SMTP_PASS: "smtp-password"
+  SMTP_DOMAIN: "portfolio.seung-ju.com"
+  SMTP_PROTOCOL: "tls"
+  CONTACT_FROM_EMAIL: "no-reply@portfolio.seung-ju.com"
+  CONTACT_TO_EMAIL: "seung-ju@seung-ju.com"
+  CONTACT_SIMULATE_EMAIL: "false"
+  NEXT_PUBLIC_SENTRY_DSN: ""
+  SENTRY_DSN: ""
+  NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE: "0.1"
+  SENTRY_TRACES_SAMPLE_RATE: "0.1"
