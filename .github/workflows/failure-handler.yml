@@ -15,7 +15,7 @@ permissions:
 jobs:
   handle-failure:
     name: Create failure issue
-    if: ${{ github.event.workflow_run.conclusion != 'success' }}
+    if: ${{ contains(fromJSON('["failure","timed_out","action_required"]'), github.event.workflow_run.conclusion) }}
     runs-on: ubuntu-latest
     steps:
       - name: Collect failed jobs
