@@ -67,10 +67,22 @@ jobs:
               "Please investigate logs and apply a fix."
             ].join("\n");
 
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            // Apply only labels that already exist in the repo to avoid validation errors.
+            const preferredLabels = ["ci", "bug", "automation"];
+            const existingLabels = await github.paginate(
+              github.rest.issues.listLabelsForRepo,
+              { owner, repo, per_page: 100 }
+            );
+            const existingNames = new Set(existingLabels.map((label) => label.name));
+            const labels = preferredLabels.filter((label) => existingNames.has(label));
+
             await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner,
+              repo,
               title,
               body,
-              labels: ["ci", "bug", "automation"]
+              labels
             });
