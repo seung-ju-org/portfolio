@@ -88,6 +88,7 @@ jobs:
           tags: |
             ${{ env.IMAGE_REPO }}:${{ steps.meta.outputs.image_tag }}
             ${{ env.IMAGE_REPO }}:ci-latest
+            ${{ env.IMAGE_REPO }}:latest
           build-args: |
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
