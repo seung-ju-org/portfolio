@@ -39,14 +39,10 @@ export function AboutSection({ locale = "ko", careerItems, experienceLabel }: Ab
         </div>
         <div className="space-y-3">
           {careerItems.map((career, index) => (
-            <Reveal
-              className="interactive-card space-y-1 rounded-xl border bg-card/60 p-4 text-sm leading-relaxed md:p-5"
-              delay={(index % 6) * 0.03}
-              key={`${career.company}-${career.period}`}
-            >
-              <p className="break-words font-semibold text-foreground">{career.company}</p>
-              <p className="break-words">{career.position}</p>
-              <p className="break-words text-muted-foreground">{career.period}</p>
+            <Reveal className="space-y-1 text-sm" delay={(index % 6) * 0.03} key={`${career.company}-${career.period}`}>
+              <p className="font-semibold text-foreground">{career.company}</p>
+              <p>{career.position}</p>
+              <p className="text-muted-foreground">{career.period}</p>
             </Reveal>
           ))}
         </div>
