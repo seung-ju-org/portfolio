@@ -1,0 +1,8 @@
+node_modules
+.next
+out
+coverage
+pnpm-lock.yaml
+src/__generated__
+helm/**/templates/*.yaml
+*.tsbuildinfo

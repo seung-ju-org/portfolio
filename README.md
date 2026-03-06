@@ -44,7 +44,7 @@ Next.js App Router 기반 포트폴리오 웹사이트입니다.
 - `prisma`: schema, seed
 - `helm/portfolio`: Kubernetes Helm chart
 - `deploy`: ArgoCD Application 매니페스트
-- `Jenkinsfile`: Jenkins CI 파이프라인 (Kaniko)
+- `.github/workflows/ci-cd.yml`: GitHub Actions CI/CD 파이프라인
 
 ## 로컬 실행 (pnpm)
 
@@ -110,27 +110,25 @@ pnpm test:coverage
   - `sentry.edge.config.ts`
 - 토큰 파일:
   - `.env.sentry-build-plugin` (git 제외)
-- Jenkins/Kaniko 빌드 시 `SENTRY_AUTH_TOKEN` build-arg 전달
+- GitHub Actions 빌드 시 `SENTRY_AUTH_TOKEN` build-arg 전달
 
 ## CI/CD
 
-### Jenkins (Kaniko)
+### GitHub Actions
 
 파이프라인 파일:
 
-- `Jenkinsfile`
+- `.github/workflows/ci-cd.yml`
 
-필수 Jenkins Credentials:
+필수 Repository Secrets:
 
-- `ghcr-credentials` (GHCR push)
-- `git-push-credentials` (repo push)
-- `sentry-auth-token` (Sentry 소스맵 업로드)
+- `SENTRY_AUTH_TOKEN` (Sentry 소스맵 업로드)
 
 동작:
 
-1. `pnpm install/lint/test/build`
-2. Kaniko 이미지 빌드/푸시 (`ghcr.io/seung-ju/portfolio`)
-3. `helm/portfolio/values-prod.yaml`의 `image.tag` 갱신 커밋
+1. `pnpm install/lint/typecheck/test/build`
+2. Docker Buildx 이미지 빌드/푸시 (`ghcr.io/seung-ju/portfolio`)
+3. `helm/portfolio/values.yaml`의 `image.tag` 갱신 커밋
 4. ArgoCD 자동 동기화
 
 ### Helm / ArgoCD
@@ -138,7 +136,7 @@ pnpm test:coverage
 렌더 테스트:
 
 ```bash
-helm template portfolio ./helm/portfolio -f ./helm/portfolio/values-prod.yaml
+helm template portfolio ./helm/portfolio -f ./helm/portfolio/values.yaml
 ```
 
 ArgoCD 앱 배포:

@@ -7,13 +7,20 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
-    "prisma:seed": "prisma db seed"
+    "prisma:seed": "prisma db seed",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs,json,md,yml,yaml,css}": "prettier --write",
+    "*.{js,jsx,ts,tsx,mjs,cjs}": "eslint --fix --max-warnings=0"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -54,8 +61,11 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9.17.0",
     "eslint-config-next": "16.1.6",
+    "husky": "^9.1.7",
     "jsdom": "^28.1.0",
+    "lint-staged": "^16.3.2",
     "postcss": "^8.4.49",
+    "prettier": "^3.8.1",
     "relay-compiler": "^20.1.1",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.21.0",
