@@ -4,6 +4,11 @@ import { defaultLocale, locales, type Locale } from "@/lib/i18n";
 
 export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://seung-ju.com").replace(/\/+$/, "");
 export const siteName = "오승주 | Portfolio";
+const siteNameByLocale: Record<Locale, string> = {
+  ko: "오승주 | 포트폴리오",
+  en: "Seung-Ju Oh | Portfolio",
+  ja: "オ・スンジュ | ポートフォリオ"
+};
 
 type PageKey = "home" | "about" | "portfolio" | "contact";
 type PagePath = "/" | "/about" | "/portfolio" | "/contact";
@@ -57,15 +62,15 @@ const pageSeoCopy: Record<Locale, Record<PageKey, { title: string; description: 
       description: "フロントエンド、バックエンド、インフラ、クラウドを横断するオ・スンジュのポートフォリオです。"
     },
     about: {
-      title: "About Me",
-      description: "オ・スンジュの経歴、技術スタック、問題解決アプローチをご紹介します。"
+      title: "プロフィール",
+      description: "オ・スンジュの経歴、技術スタック、問題解決のアプローチと開発リーダーシップをご紹介します。"
     },
     portfolio: {
-      title: "Portfolio",
+      title: "ポートフォリオ",
       description: "実務プロジェクトの役割、技術、成果を整理したポートフォリオをご覧ください。"
     },
     contact: {
-      title: "Contact Me",
+      title: "お問い合わせ",
       description: "協業・採用・プロジェクトに関するお問い合わせはこちらから。"
     }
   }
@@ -81,22 +86,18 @@ function toAbsolute(path: string): string {
   return new URL(path, `${siteUrl}/`).toString();
 }
 
-export function buildPageMetadata({
-  locale,
-  page,
-  path
-}: {
-  locale: Locale;
-  page: PageKey;
-  path: PagePath;
-}): Metadata {
+export function buildPageMetadata({ locale, page, path }: { locale: Locale; page: PageKey; path: PagePath }): Metadata {
   const copy = pageSeoCopy[locale][page];
+  const localizedSiteName = siteNameByLocale[locale];
+  const titleText = `${copy.title} | ${localizedSiteName}`;
   const canonicalPath = withLocalePrefix(locale, path);
   const canonical = toAbsolute(canonicalPath);
-  const languages = Object.fromEntries(locales.map((code) => [code, toAbsolute(withLocalePrefix(code, path))])) as Record<Locale, string>;
+  const languages = Object.fromEntries(
+    locales.map((code) => [code, toAbsolute(withLocalePrefix(code, path))])
+  ) as Record<Locale, string>;
 
   return {
-    title: copy.title,
+    title: { absolute: titleText },
     description: copy.description,
     alternates: {
       canonical,
@@ -106,10 +107,10 @@ export function buildPageMetadata({
       }
     },
     openGraph: {
-      title: copy.title,
+      title: titleText,
       description: copy.description,
       url: canonical,
-      siteName,
+      siteName: localizedSiteName,
       locale: ogLocaleMap[locale],
       type: "website",
       images: [
@@ -121,10 +122,9 @@ export function buildPageMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: copy.title,
+      title: titleText,
       description: copy.description,
       images: [toAbsolute("/seungju-wordmark-black.svg")]
     }
   };
 }
-
