@@ -13,6 +13,12 @@ export function withLocale(locale: Locale, path: "/" | "/about" | "/portfolio" |
   return `/${locale}${path}`;
 }
 
+export function getLocaleFromPathname(pathname: string | null | undefined): Locale {
+  if (!pathname) return defaultLocale;
+  const [first] = pathname.split("/").filter(Boolean);
+  return first && isLocale(first) ? first : defaultLocale;
+}
+
 export const messages = {
   ko: {
     nav: { home: "Home", about: "About Me", portfolio: "Portfolio", contact: "Contact Me", contactButton: "Contact" },
@@ -44,7 +50,7 @@ export const messages = {
       domain: "핵심 영역: Design, Web, App, CMS, API, DevOps",
       coreTitle: "Core Tech",
       summaryLabel: "Summary",
-      careerLabel: "Career",
+      careerLabel: "경력",
       essayLabel: "Statement",
       essayParagraphs: [
         "기술을 연결하고 방향을 설계하는 개발 리더",
@@ -125,6 +131,16 @@ export const messages = {
       formSending: "전송 중...",
       formSuccess: "메일이 전송되었습니다.",
       formError: "메일 전송에 실패했습니다. 잠시 후 다시 시도해주세요."
+    },
+    error: {
+      code404: "404",
+      notFoundTitle: "페이지를 찾을 수 없습니다",
+      notFoundDescription: "요청하신 주소가 잘못되었거나, 페이지가 이동 또는 삭제되었을 수 있습니다.",
+      codeRuntime: "ERROR",
+      runtimeTitle: "페이지를 불러오는 중 문제가 발생했습니다",
+      runtimeDescription: "일시적인 오류일 수 있습니다. 다시 시도하거나 홈으로 이동해 주세요.",
+      retry: "다시 시도",
+      goHome: "홈으로 이동"
     },
     footer: { copyright: "All rights reserved." }
   },
@@ -219,6 +235,16 @@ export const messages = {
       formSuccess: "Your email has been sent.",
       formError: "Failed to send email. Please try again."
     },
+    error: {
+      code404: "404",
+      notFoundTitle: "Page not found",
+      notFoundDescription: "The address may be incorrect, or the page may have been moved or removed.",
+      codeRuntime: "ERROR",
+      runtimeTitle: "Something went wrong while loading this page",
+      runtimeDescription: "This may be temporary. Please try again or go back to home.",
+      retry: "Try again",
+      goHome: "Go to Home"
+    },
     footer: { copyright: "All rights reserved." }
   },
   ja: {
@@ -257,7 +283,7 @@ export const messages = {
       domain: "領域: Design, Web, App, CMS, API, DevOps",
       coreTitle: "Core Tech",
       summaryLabel: "Summary",
-      careerLabel: "経歴",
+      careerLabel: "Career",
       essayLabel: "Statement",
       essayParagraphs: [
         "技術をつなぎ、方向性を設計する開発リード",
@@ -317,6 +343,16 @@ export const messages = {
       formSending: "送信中...",
       formSuccess: "メールを送信しました。",
       formError: "メール送信に失敗しました。しばらくして再度お試しください。"
+    },
+    error: {
+      code404: "404",
+      notFoundTitle: "ページが見つかりません",
+      notFoundDescription: "URL が正しくないか、ページが移動または削除された可能性があります。",
+      codeRuntime: "ERROR",
+      runtimeTitle: "ページの読み込み中に問題が発生しました",
+      runtimeDescription: "一時的なエラーの可能性があります。再試行するかホームへ戻ってください。",
+      retry: "再試行",
+      goHome: "ホームへ移動"
     },
     footer: { copyright: "All rights reserved." }
   }
