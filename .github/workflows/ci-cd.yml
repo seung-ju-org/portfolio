@@ -9,10 +9,6 @@ on:
       - "helm/portfolio/values.yaml"
   workflow_dispatch:
 
-permissions:
-  contents: write
-  packages: write
-
 concurrency:
   group: portfolio-${{ github.ref }}
   cancel-in-progress: true
@@ -25,6 +21,8 @@ jobs:
   verify:
     name: Verify (lint/test/build)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -56,6 +54,9 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: verify
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4

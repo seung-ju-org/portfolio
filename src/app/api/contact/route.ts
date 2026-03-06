@@ -19,6 +19,28 @@ function isPlaceholderValue(value: string) {
   );
 }
 
+function sanitizeHeaderValue(value: string) {
+  return value.replace(/[\r\n]+/g, " ").trim();
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function isValidEmail(value: string) {
+  if (value.length > 254) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function isReasonableLength(value: string, min: number, max: number) {
+  return value.length >= min && value.length <= max;
+}
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as {
@@ -28,12 +50,28 @@ export async function POST(request: Request) {
       message?: string;
     };
 
-    const email = body.email?.trim() ?? "";
-    const phone = body.phone?.trim() ?? "";
-    const subject = body.subject?.trim() ?? "";
-    const message = body.message?.trim() ?? "";
+    const email = sanitizeHeaderValue(body.email?.trim() ?? "");
+    const phone = sanitizeHeaderValue(body.phone?.trim() ?? "");
+    const subject = sanitizeHeaderValue(body.subject?.trim() ?? "");
+    const message = (body.message?.trim() ?? "").replace(/\r\n/g, "\n");
 
     if (!email || !phone || !subject || !message) {
+      return Response.json({ error: "Invalid payload" }, { status: 400 });
+    }
+
+    if (!isValidEmail(email)) {
+      return Response.json({ error: "Invalid payload" }, { status: 400 });
+    }
+
+    if (!isReasonableLength(phone, 7, 40)) {
+      return Response.json({ error: "Invalid payload" }, { status: 400 });
+    }
+
+    if (!isReasonableLength(subject, 1, 200)) {
+      return Response.json({ error: "Invalid payload" }, { status: 400 });
+    }
+
+    if (!isReasonableLength(message, 1, 5000)) {
       return Response.json({ error: "Invalid payload" }, { status: 400 });
     }
 
@@ -82,6 +120,11 @@ export async function POST(request: Request) {
 
     await transporter.verify();
 
+    const safeEmail = escapeHtml(email);
+    const safePhone = escapeHtml(phone);
+    const safeSubject = escapeHtml(subject);
+    const safeMessage = escapeHtml(message).replace(/\n/g, "<br />");
+
     await transporter.sendMail({
       from,
       to,
@@ -89,11 +132,11 @@ export async function POST(request: Request) {
       subject,
       text: `Email: ${email}\nPhone: ${phone}\n\n${message}`,
       html: `
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Subject:</strong> ${subject}</p>
+        <p><strong>Email:</strong> ${safeEmail}</p>
+        <p><strong>Phone:</strong> ${safePhone}</p>
+        <p><strong>Subject:</strong> ${safeSubject}</p>
         <hr />
-        <p>${message.replace(/\n/g, "<br />")}</p>
+        <p>${safeMessage}</p>
       `
     });
 

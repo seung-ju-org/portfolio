@@ -78,4 +78,39 @@ describe("POST /api/contact", () => {
 
     expect(response.status).toBe(500);
   });
+
+  it("sanitizes html payload before composing email body", async () => {
+    const response = await POST(
+      buildRequest({
+        email: "user@example.com",
+        phone: "+82 10 0000 0000",
+        subject: "Hello <script>alert(1)</script>",
+        message: "<img src=x onerror=alert(1) />\nline2"
+      })
+    );
+
+    expect(response.status).toBe(200);
+
+    const transport = (nodemailer.createTransport as unknown as ReturnType<typeof vi.fn>).mock.results[0].value;
+    expect(transport.sendMail).toHaveBeenCalledTimes(1);
+
+    const payload = transport.sendMail.mock.calls[0][0] as { html: string; subject: string; message?: string };
+    expect(payload.subject).toBe("Hello <script>alert(1)</script>");
+    expect(payload.html).not.toContain("<script>");
+    expect(payload.html).toContain("&lt;script&gt;alert(1)&lt;/script&gt;");
+    expect(payload.html).toContain("&lt;img src=x onerror=alert(1) /&gt;<br />line2");
+  });
+
+  it("returns 400 for invalid email header injection payload", async () => {
+    const response = await POST(
+      buildRequest({
+        email: "attacker@example.com\r\nBcc:evil@example.com",
+        phone: "+82 10 0000 0000",
+        subject: "Hello",
+        message: "Test body"
+      })
+    );
+
+    expect(response.status).toBe(400);
+  });
 });
