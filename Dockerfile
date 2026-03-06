@@ -29,6 +29,10 @@ RUN --mount=type=cache,target=/root/.npm \
 FROM node:${NODE_VERSION} AS builder
 WORKDIR /app
 
+RUN apt-get update -y \
+    && apt-get install -y --no-install-recommends openssl \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 
@@ -55,6 +59,10 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+
+RUN apt-get update -y \
+    && apt-get install -y --no-install-recommends openssl \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder --chown=node:node /app/public ./public
 
