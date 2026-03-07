@@ -10,12 +10,16 @@ function readEnv(...names: string[]) {
 }
 
 function isPlaceholderValue(value: string) {
+  const normalized = value.trim().toLowerCase();
+
   return (
-    value.includes("example.com") ||
-    value === "smtp-user" ||
-    value === "smtp-password" ||
-    value === "smtp.example.com" ||
-    value === "smtp-user@example.com"
+    normalized === "smtp-user" ||
+    normalized === "smtp-password" ||
+    normalized === "smtp.example.com" ||
+    normalized === "smtp-user@example.com" ||
+    normalized === "example.com" ||
+    normalized.endsWith(".example.com") ||
+    normalized.endsWith("@example.com")
   );
 }
 
@@ -54,10 +58,6 @@ export async function POST(request: Request) {
     const phone = sanitizeHeaderValue(body.phone?.trim() ?? "");
     const subject = sanitizeHeaderValue(body.subject?.trim() ?? "");
     const message = (body.message?.trim() ?? "").replace(/\r\n/g, "\n");
-
-    if (!email || !phone || !subject || !message) {
-      return Response.json({ error: "Invalid payload" }, { status: 400 });
-    }
 
     if (!isValidEmail(email)) {
       return Response.json({ error: "Invalid payload" }, { status: 400 });
