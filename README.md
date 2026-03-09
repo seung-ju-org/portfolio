@@ -17,8 +17,6 @@ Next.js App Router 기반 포트폴리오 웹사이트입니다.
   - DB 저장 데이터 기반 다국어 조회
 - Contact:
   - 메일 전송 API(`/api/contact`)
-- Sentry:
-  - App/Server/Edge 에러 수집 + 소스맵 업로드
 - 배포:
   - Docker(standalone) + Helm + ArgoCD
 - CI:
@@ -33,7 +31,6 @@ Next.js App Router 기반 포트폴리오 웹사이트입니다.
 - Prisma + PostgreSQL
 - GraphQL Yoga + Relay Runtime
 - Redis (ioredis)
-- Sentry
 - Vitest + Testing Library
 
 ## 프로젝트 구조
@@ -68,9 +65,6 @@ pnpm dev
 - `REDIS_PASSWORD`
 - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_DOMAIN`, `SMTP_PROTOCOL`
 - `CONTACT_FROM_EMAIL`, `CONTACT_TO_EMAIL`
-- `NEXT_PUBLIC_SENTRY_DSN`
-- `SENTRY_DSN`
-- `SENTRY_AUTH_TOKEN` (빌드 소스맵 업로드)
 
 ## DB/캐시
 
@@ -102,16 +96,6 @@ pnpm test:coverage
 - lint/typecheck 통과
 - coverage threshold 적용 (`vitest.config.ts`)
 
-## Sentry
-
-- 설정 파일:
-  - `src/instrumentation-client.ts`
-  - `sentry.server.config.ts`
-  - `sentry.edge.config.ts`
-- 토큰 파일:
-  - `.env.sentry-build-plugin` (git 제외)
-- GitHub Actions 빌드 시 `SENTRY_AUTH_TOKEN` build-arg 전달
-
 ## CI/CD
 
 ### GitHub Actions
@@ -119,10 +103,6 @@ pnpm test:coverage
 파이프라인 파일:
 
 - `.github/workflows/ci-cd.yml`
-
-필수 Repository Secrets:
-
-- `SENTRY_AUTH_TOKEN` (Sentry 소스맵 업로드)
 
 동작:
 

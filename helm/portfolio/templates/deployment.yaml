@@ -51,16 +51,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "portfolio.fullname" . }}-env
                   key: REDIS_PASSWORD
-            - name: SENTRY_DSN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "portfolio.fullname" . }}-env
-                  key: SENTRY_DSN
-            - name: NEXT_PUBLIC_SENTRY_DSN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "portfolio.fullname" . }}-env
-                  key: NEXT_PUBLIC_SENTRY_DSN
             {{- range $key, $value := .Values.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}

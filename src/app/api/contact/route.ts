@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-import * as Sentry from "@sentry/nextjs";
 
 function readEnv(...names: string[]) {
   for (const name of names) {
@@ -143,7 +142,6 @@ export async function POST(request: Request) {
     return Response.json({ ok: true });
   } catch (error) {
     console.error("[contact] send failed", error);
-    Sentry.captureException(error);
     const message = error instanceof Error ? error.message : "Failed to send email";
     const errorPayload = process.env.NODE_ENV === "development" ? message : "Failed to send email";
     return Response.json({ error: errorPayload }, { status: 500 });
