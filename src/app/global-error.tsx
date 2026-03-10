@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import * as Sentry from "@sentry/nextjs";
 
 import { buttonVariants } from "@/components/ui/button";
 import { getLocaleFromPathname, getMessages, withLocale } from "@/lib/i18n";
@@ -14,14 +12,10 @@ type GlobalErrorPageProps = {
   reset: () => void;
 };
 
-export default function GlobalErrorPage({ error, reset }: GlobalErrorPageProps) {
+export default function GlobalErrorPage({ reset }: GlobalErrorPageProps) {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
   const t = getMessages(locale).error;
-
-  useEffect(() => {
-    Sentry.captureException(error);
-  }, [error]);
 
   return (
     <html lang={locale}>
