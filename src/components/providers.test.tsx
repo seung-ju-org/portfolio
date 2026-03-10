@@ -35,6 +35,10 @@ function Consumer() {
 }
 
 describe("ThemeProvider", () => {
+  it("throws when useTheme is used outside ThemeProvider", () => {
+    expect(() => render(<Consumer />)).toThrow("useTheme must be used within ThemeProvider");
+  });
+
   it("provides theme context", () => {
     render(
       <ThemeProvider>
