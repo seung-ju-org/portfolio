@@ -3,8 +3,8 @@ import Link from "next/link";
 
 import { Reveal } from "@/components/reveal";
 import { buttonVariants } from "@/components/ui/button";
+import { getProjectCountViaGraphql } from "@/lib/graphql/project-count";
 import { getMessages, withLocale, type Locale } from "@/lib/i18n";
-import { getCareerProjectCount } from "@/lib/projects";
 import { cn } from "@/lib/utils";
 
 type HeroSectionProps = {
@@ -125,7 +125,7 @@ function formatCareerMonths(locale: Locale, totalMonths: number) {
 
 export async function HeroSection({ locale = "ko", compactBottom = false }: HeroSectionProps) {
   const t = getMessages(locale);
-  const projectCount = await getCareerProjectCount();
+  const projectCount = await getProjectCountViaGraphql();
   const careerTotalMonths = getCareerTotalMonths(new Date(Date.UTC(2019, 0, 1)));
   const copy = homeCopy[locale];
 
@@ -133,7 +133,9 @@ export async function HeroSection({ locale = "ko", compactBottom = false }: Hero
     <section className={cn("container pt-18 md:pt-28", compactBottom ? "pb-8 md:pb-10" : "pb-24 md:pb-32")} id="top">
       <div className="grid items-start gap-10">
         <Reveal className="space-y-6">
-          <p className="inline-flex rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary">{t.hero.badge}</p>
+          <p className="inline-flex rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary">
+            {t.hero.badge}
+          </p>
           <h1 className="text-4xl font-bold !leading-[1.35] tracking-tight md:text-5xl md:!leading-[1.35]">
             {t.hero.titleLine1}
             <br />
@@ -157,13 +159,21 @@ export async function HeroSection({ locale = "ko", compactBottom = false }: Hero
             </div>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link className={buttonVariants({ size: "lg", variant: "default" })} href={withLocale(locale, "/portfolio")}>
+            <Link
+              className={buttonVariants({ size: "lg", variant: "default" })}
+              href={withLocale(locale, "/portfolio")}
+            >
               {t.hero.ctaProjects}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="flex gap-4 text-sm text-muted-foreground">
-            <a className="inline-flex items-center gap-1 hover:text-foreground" href="https://github.com/seung-juv" rel="noreferrer" target="_blank">
+            <a
+              className="inline-flex items-center gap-1 hover:text-foreground"
+              href="https://github.com/seung-juv"
+              rel="noreferrer"
+              target="_blank"
+            >
               <Github className="h-4 w-4" /> GitHub
             </a>
           </div>
@@ -172,7 +182,11 @@ export async function HeroSection({ locale = "ko", compactBottom = false }: Hero
 
       <div className="mt-16 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {copy.stackCards.map((card, index) => (
-          <Reveal className="interactive-card rounded-2xl border bg-card/70 p-6" delay={0.08 + index * 0.04} key={card.title}>
+          <Reveal
+            className="interactive-card rounded-2xl border bg-card/70 p-6"
+            delay={0.08 + index * 0.04}
+            key={card.title}
+          >
             <div className="mb-3 inline-flex rounded-lg border bg-background p-2 text-primary">
               <StackIcon type={card.icon} />
             </div>
@@ -181,7 +195,6 @@ export async function HeroSection({ locale = "ko", compactBottom = false }: Hero
           </Reveal>
         ))}
       </div>
-
     </section>
   );
 }

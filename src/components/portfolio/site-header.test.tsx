@@ -44,4 +44,16 @@ describe("SiteHeader", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
     expect(screen.getByRole("button", { name: "Close menu" })).toBeInTheDocument();
   });
+
+  it("closes the mobile menu from close button and nav click", () => {
+    const { container } = render(<SiteHeader locale="en" />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
+    fireEvent.click(screen.getByRole("button", { name: "Close menu" }));
+    expect(container.querySelector("aside")).toHaveAttribute("aria-hidden", "true");
+
+    fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
+    fireEvent.click(screen.getAllByRole("link", { name: "Contact Me" })[1]);
+    expect(container.querySelector("aside")).toHaveAttribute("aria-hidden", "true");
+  });
 });

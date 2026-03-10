@@ -10,11 +10,13 @@ vi.mock("next/link", () => ({
 }));
 
 vi.mock("@/components/reveal", () => ({
-  Reveal: ({ children, className }: { children: React.ReactNode; className?: string }) => <div className={className}>{children}</div>
+  Reveal: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+    <div className={className}>{children}</div>
+  )
 }));
 
-vi.mock("@/lib/projects", () => ({
-  getCareerProjectCount: vi.fn(async () => 21)
+vi.mock("@/lib/graphql/project-count", () => ({
+  getProjectCountViaGraphql: vi.fn(async () => 21)
 }));
 
 import { HeroSection } from "@/components/portfolio/hero-section";
