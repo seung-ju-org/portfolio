@@ -129,6 +129,17 @@ Ingress host:
 
 - `portfolio.seung-ju.com`
 
+운영 메일 전송을 쓰려면 Helm `secretEnv`에 아래 값이 반드시 채워져 있어야 합니다.
+
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `SMTP_DOMAIN`
+- `SMTP_PROTOCOL`
+- `CONTACT_TO_EMAIL`
+- `CONTACT_FROM_EMAIL`
+
 ## 운영 메모
 
 - GitHub 원격: `git@github.com:seung-ju-org/portfolio.git`
