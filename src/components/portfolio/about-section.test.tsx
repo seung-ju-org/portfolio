@@ -26,4 +26,18 @@ describe("AboutSection", () => {
     expect(screen.getByText("Career: Jan 2019 -")).toBeInTheDocument();
     expect(screen.getByText("Statement")).toBeInTheDocument();
   });
+
+  it("marks the japanese about section for locale-specific mobile wrapping", () => {
+    render(
+      <AboutSection
+        careerItems={[{ company: "Actbase LLC", position: "Lead", period: "2021年1月 - 2023年9月" }]}
+        experienceLabel="経歴: 2019年1月 ~"
+        locale="ja"
+      />
+    );
+
+    expect(screen.getByRole("heading", { name: "About Me" }).closest("section")).toHaveAttribute("data-locale", "ja");
+    expect(screen.getByRole("heading", { name: "About Me" }).closest("section")).toHaveAttribute("data-page", "about");
+    expect(screen.getByRole("heading", { name: "About Me" }).closest("section")).toHaveAttribute("lang", "ja");
+  });
 });
