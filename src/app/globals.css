@@ -134,4 +134,10 @@ html[data-theme="system"] .theme-toggle .theme-toggle-btn[data-theme-value="syst
     word-break: normal;
     overflow-wrap: anywhere;
   }
+
+  [data-page="about"][data-locale="ja"],
+  [data-page="about"][data-locale="ja"] * {
+    word-break: normal;
+    overflow-wrap: anywhere;
+  }
 }

@@ -13,7 +13,7 @@ export function AboutSection({ locale = "ko", careerItems, experienceLabel }: Ab
   const essayParagraphs = (t.about as { essayParagraphs?: readonly string[] }).essayParagraphs;
 
   return (
-    <section className="container py-14 md:py-20" id="about">
+    <section className="container py-14 md:py-20" data-locale={locale} data-page="about" id="about" lang={locale}>
       <div className="mx-auto max-w-6xl space-y-5 break-keep text-muted-foreground">
         <h2 className="text-2xl font-bold !leading-[1.35] text-foreground">{t.about.title}</h2>
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground/80">
