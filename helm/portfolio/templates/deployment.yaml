@@ -51,6 +51,46 @@ spec:
                 secretKeyRef:
                   name: {{ include "portfolio.fullname" . }}-env
                   key: REDIS_PASSWORD
+            - name: SMTP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "portfolio.fullname" . }}-env
+                  key: SMTP_HOST
+            - name: SMTP_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "portfolio.fullname" . }}-env
+                  key: SMTP_PORT
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "portfolio.fullname" . }}-env
+                  key: SMTP_USER
+            - name: SMTP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "portfolio.fullname" . }}-env
+                  key: SMTP_PASS
+            - name: SMTP_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "portfolio.fullname" . }}-env
+                  key: SMTP_DOMAIN
+            - name: SMTP_PROTOCOL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "portfolio.fullname" . }}-env
+                  key: SMTP_PROTOCOL
+            - name: CONTACT_TO_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "portfolio.fullname" . }}-env
+                  key: CONTACT_TO_EMAIL
+            - name: CONTACT_FROM_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "portfolio.fullname" . }}-env
+                  key: CONTACT_FROM_EMAIL
             {{- range $key, $value := .Values.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
