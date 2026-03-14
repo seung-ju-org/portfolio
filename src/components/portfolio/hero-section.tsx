@@ -130,7 +130,12 @@ export async function HeroSection({ locale = "ko", compactBottom = false }: Hero
   const copy = homeCopy[locale];
 
   return (
-    <section className={cn("container pt-18 md:pt-28", compactBottom ? "pb-8 md:pb-10" : "pb-24 md:pb-32")} id="top">
+    <section
+      className={cn("container pt-18 md:pt-28", compactBottom ? "pb-8 md:pb-10" : "pb-24 md:pb-32")}
+      data-locale={locale}
+      id="top"
+      lang={locale}
+    >
       <div className="grid items-start gap-10">
         <Reveal className="space-y-6">
           <p className="inline-flex rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary">
