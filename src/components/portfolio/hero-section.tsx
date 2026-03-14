@@ -131,7 +131,7 @@ export async function HeroSection({ locale = "ko", compactBottom = false }: Hero
 
   return (
     <section
-      className={cn("container pt-18 md:pt-28", compactBottom ? "pb-8 md:pb-10" : "pb-24 md:pb-32")}
+      className={cn("container py-14 md:pt-28", compactBottom ? "md:pb-10" : "md:pb-32")}
       data-locale={locale}
       id="top"
       lang={locale}
