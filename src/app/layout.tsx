@@ -23,26 +23,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Seung-Ju Oh" }],
   creator: "Seung-Ju Oh",
   publisher: "Seung-Ju Oh",
-  keywords: [
-    "오승주",
-    "portfolio",
-    "software engineer",
-    "next.js",
-    "react",
-    "frontend",
-    "backend",
-    "infra",
-    "devops"
-  ],
-  alternates: {
-    canonical: "/",
-    languages: {
-      ko: "/",
-      en: "/en",
-      ja: "/ja",
-      "x-default": "/"
-    }
-  },
+  keywords: ["오승주", "portfolio", "software engineer", "next.js", "react", "frontend", "backend", "infra", "devops"],
   openGraph: {
     title: siteName,
     description: "기술을 연결하고 방향을 설계하는 개발 리더 오승주의 포트폴리오",
