@@ -31,4 +31,15 @@ describe("HeroSection", () => {
     expect(screen.getByRole("link", { name: /프로젝트 보기/i })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /문의하기/i })).not.toBeInTheDocument();
   });
+
+  it("marks the japanese hero section for mobile-specific line breaking", async () => {
+    const element = await HeroSection({ locale: "ja" });
+    render(element);
+
+    expect(screen.getByRole("heading", { name: /技術をつなぎ/i }).closest("section")).toHaveAttribute(
+      "data-locale",
+      "ja"
+    );
+    expect(screen.getByRole("heading", { name: /技術をつなぎ/i }).closest("section")).toHaveAttribute("lang", "ja");
+  });
 });
