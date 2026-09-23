@@ -271,7 +271,7 @@ const content: Localized<Omit<SiteContent, "profile">> = {
     capabilities: [
       {
         title: "Web・アプリ",
-        description: "ユーザーと運用者の体験のための製品開発",
+        description: "ユーザーと運用者体験のためのプロダクト開発",
         skills: ["React", "Next.js", "React Native", "TypeScript"]
       },
       {
@@ -286,7 +286,7 @@ const content: Localized<Omit<SiteContent, "profile">> = {
       },
       {
         title: "技術リーダーシップ",
-        description: "プロジェクトのリードと開発プロセスの管理",
+        description: "プロジェクトリードと開発プロセス管理",
         skills: ["Project Management", "Technical Leadership", "Git", "CI/CD"]
       }
     ],
