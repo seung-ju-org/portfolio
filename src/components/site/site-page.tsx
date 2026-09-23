@@ -13,6 +13,7 @@ const copy: Record<
     experience: string;
     work: string;
     contact: string;
+    contactLink: string;
     education: string;
     contactMethod: string;
   }
@@ -23,6 +24,7 @@ const copy: Record<
     experience: "최근 경력",
     work: "주요 작업",
     contact: "함께 이야기해요",
+    contactLink: "연락",
     education: "교육",
     contactMethod: "메일과 LinkedIn으로 연락하실 수 있습니다."
   },
@@ -32,6 +34,7 @@ const copy: Record<
     experience: "Recent experience",
     work: "Selected work",
     contact: "Let’s work together",
+    contactLink: "Contact",
     education: "Education",
     contactMethod: "You can reach me by email or LinkedIn."
   },
@@ -41,6 +44,7 @@ const copy: Record<
     experience: "最近の経歴",
     work: "主な仕事",
     contact: "ご相談ください",
+    contactLink: "連絡",
     education: "学歴",
     contactMethod: "メールまたはLinkedInからご連絡いただけます。"
   }
@@ -58,7 +62,7 @@ export function SitePage({ locale, page, content }: { locale: Locale; page: Page
           <span>
             {content.profile.name} / {content.profile.location}
           </span>
-          <Link href={pagePath(locale, "contact")}>Contact ↗</Link>
+          <Link href={pagePath(locale, "contact")}>{text.contactLink} ↗</Link>
         </div>
         <section className={`hero ${home ? "hero-home" : "page-intro"}`}>
           <div className="hero-copy">
@@ -217,8 +221,14 @@ export function SitePage({ locale, page, content }: { locale: Locale; page: Page
         )}
         {(home || page === "contact") && (
           <section className="contact">
-            <p className="section-kicker">{home ? "05" : "01"} / CONTACT</p>
-            <h2>{text.contact}</h2>
+            {/* Same as the work section: the contact page hero already says this, so the section
+                heading would repeat it. Keep the heading on the home page only. */}
+            {home && (
+              <>
+                <p className="section-kicker">05 / CONTACT</p>
+                <h2>{text.contact}</h2>
+              </>
+            )}
             <CopyEmail email={content.profile.email} locale={locale} />
             <p className="social-links">
               <a href={content.profile.linkedin} rel="noreferrer" target="_blank">

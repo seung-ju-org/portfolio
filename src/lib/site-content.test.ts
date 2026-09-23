@@ -36,6 +36,16 @@ describe("site content", () => {
     expect(projects.find((project) => project.id === "10")?.period).toBe("2023.06 ~ 2023.09");
   });
 
+  it("localizes the capability cards instead of leaving Korean on /en and /ja", () => {
+    for (const locale of ["en", "ja"] as const) {
+      for (const capability of getSiteContent(locale).capabilities) {
+        expect(`${capability.title} ${capability.description}`).not.toMatch(/[가-힣]/);
+      }
+    }
+    expect(getSiteContent("ja").capabilities[0]?.title).toBe("Web・アプリ");
+    expect(getSiteContent("en").capabilities[1]?.description).toBe("Service APIs and data processing");
+  });
+
   it("localizes every evidence project without Korean fallback copy", () => {
     const ids = evidenceProjects.ko.map((project) => project.id);
     expect(evidenceProjects.en.map((project) => project.id)).toEqual(ids);

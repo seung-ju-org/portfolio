@@ -232,7 +232,28 @@ const content: Localized<Omit<SiteContent, "profile">> = {
       "Leading a team taught me that technical judgment requires both breadth and execution: deciding what to choose, how far to implement, when to refactor, and where to improve.",
       "I aim to design structures across technologies, investigate where needed, and complete services end to end."
     ],
-    capabilities: [],
+    capabilities: [
+      {
+        title: "Web & App",
+        description: "Product development for both user and operator experience",
+        skills: ["React", "Next.js", "React Native", "TypeScript"]
+      },
+      {
+        title: "Backend",
+        description: "Service APIs and data processing",
+        skills: ["Kotlin", "Spring Boot", "Node.js", "NestJS"]
+      },
+      {
+        title: "Infrastructure & Operations",
+        description: "Deployment and observability environments",
+        skills: ["AWS", "Kubernetes", "Jenkins", "Helm", "ArgoCD", "Prometheus"]
+      },
+      {
+        title: "Technical Leadership",
+        description: "Project leadership and development process management",
+        skills: ["Project Management", "Technical Leadership", "Git", "CI/CD"]
+      }
+    ],
     careers: [],
     education: [],
     projects: []
@@ -247,7 +268,28 @@ const content: Localized<Omit<SiteContent, "profile">> = {
       "チーム長として、技術判断には広い視野と実行力が必要だと学びました。技術選択、実装範囲、リファクタリングの時機、改善箇所を判断し、実装まで担ってきました。",
       "複数の技術をつないで構造を設計し、必要な箇所を深く解決し、サービスを最後まで完成させる開発者を目指しています。"
     ],
-    capabilities: [],
+    capabilities: [
+      {
+        title: "Web・アプリ",
+        description: "ユーザーと運用者の体験のための製品開発",
+        skills: ["React", "Next.js", "React Native", "TypeScript"]
+      },
+      {
+        title: "バックエンド",
+        description: "サービスAPIとデータ処理",
+        skills: ["Kotlin", "Spring Boot", "Node.js", "NestJS"]
+      },
+      {
+        title: "インフラ・運用",
+        description: "デプロイと監視環境",
+        skills: ["AWS", "Kubernetes", "Jenkins", "Helm", "ArgoCD", "Prometheus"]
+      },
+      {
+        title: "技術リーダーシップ",
+        description: "プロジェクトのリードと開発プロセスの管理",
+        skills: ["Project Management", "Technical Leadership", "Git", "CI/CD"]
+      }
+    ],
     careers: [],
     education: [],
     projects: []
@@ -259,7 +301,9 @@ function translate(locale: Exclude<Locale, "ko">): Omit<SiteContent, "profile" |
     locale === "en" ? " (See Korean page for detailed history.)" : "（詳細な経歴は韓国語ページをご覧ください。）";
   return {
     ...content.ko,
-    capabilities: content.ko.capabilities.map((item) => ({ ...item })),
+    // Careers carry the suffix because they stay Korean on purpose; capabilities are four short
+    // labels, so they are translated outright rather than left as Korean without a notice.
+    capabilities: content[locale].capabilities.map((item) => ({ ...item })),
     careers: content.ko.careers.map((item) => ({ ...item, summary: `${item.summary}${suffix}` })),
     education: content.ko.education.map((item) => ({ ...item })),
     projects: content.ko.projects.map((item) => ({ ...item }))
