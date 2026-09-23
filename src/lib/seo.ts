@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
-import { defaultLocale, locales, type Locale } from "@/lib/i18n";
+import { defaultLocale, locales } from "@/lib/i18n";
+import type { Locale, PageKind } from "@/lib/site-content";
 
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://seung-ju.com").replace(/\/+$/, "");
+export const siteUrl = "https://portfolio.seung-ju.com";
 export const siteName = "오승주 | Portfolio";
 const siteNameByLocale: Record<Locale, string> = {
   ko: "오승주 | 포트폴리오",
@@ -10,7 +11,7 @@ const siteNameByLocale: Record<Locale, string> = {
   ja: "オ・スンジュ | ポートフォリオ"
 };
 
-type PageKey = "home" | "about" | "portfolio" | "contact";
+type PageKey = PageKind;
 type PagePath = "/" | "/about" | "/portfolio" | "/contact";
 
 const ogLocaleMap: Record<Locale, string> = {
@@ -78,8 +79,8 @@ const pageSeoCopy: Record<Locale, Record<PageKey, { title: string; description: 
 
 function withLocalePrefix(locale: Locale, path: PagePath): string {
   const prefix = locale === defaultLocale ? "" : `/${locale}`;
-  if (path === "/") return prefix || "/";
-  return `${prefix}${path}`;
+  if (path === "/") return prefix ? `${prefix}/` : "/";
+  return `${prefix}${path}/`;
 }
 
 function toAbsolute(path: string): string {
@@ -115,7 +116,7 @@ export function buildPageMetadata({ locale, page, path }: { locale: Locale; page
       type: "website",
       images: [
         {
-          url: toAbsolute("/seungju-wordmark-black.svg"),
+          url: toAbsolute("/og-image.png"),
           alt: "Seung-Ju Oh Portfolio"
         }
       ]
@@ -124,7 +125,7 @@ export function buildPageMetadata({ locale, page, path }: { locale: Locale; page
       card: "summary_large_image",
       title: titleText,
       description: copy.description,
-      images: [toAbsolute("/seungju-wordmark-black.svg")]
+      images: [toAbsolute("/og-image.png")]
     }
   };
 }

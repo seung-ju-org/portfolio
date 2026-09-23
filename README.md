@@ -1,147 +1,34 @@
 # Seung Ju Portfolio
 
-Next.js App Router 기반 포트폴리오 웹사이트입니다.  
-방문자용 사이트를 우선 구축했고, Portfolio/Career 데이터는 DB + GraphQL + Relay로 동작합니다.
+Static Next.js portfolio for `https://portfolio.seung-ju.com`. Korean uses unprefixed paths, English uses `/en`, Japanese uses `/ja`, and `/ko` redirects at CloudFront.
 
-## 주요 기능
-
-- 다국어: `ko`, `en`, `ja`
-- 테마: `light`, `system`, `dark` (쿠키 기반 유지)
-- 페이지: Home / About Me / Portfolio / Contact Me
-- Portfolio:
-  - PostgreSQL 저장 데이터 조회
-  - GraphQL API(`/api/graphql`) + Relay 클라이언트
-  - 커서 기반 무한 스크롤
-  - Redis 캐시
-- Career:
-  - DB 저장 데이터 기반 다국어 조회
-- Contact:
-  - 메일 전송 API(`/api/contact`)
-- 배포:
-  - Docker(standalone) + Helm + ArgoCD
-- CI:
-  - Jenkinsfile + Kaniko 빌드/푸시 + GitOps 태그 업데이트
-
-## 기술 스택
-
-- Next.js 16.1.6 (App Router)
-- React / React DOM
-- TypeScript
-- Tailwind CSS + shadcn/ui
-- Prisma + PostgreSQL
-- GraphQL Yoga + Relay Runtime
-- Redis (ioredis)
-- Vitest + Testing Library
-
-## 프로젝트 구조
-
-- `src/app`: 라우팅, 페이지, API 라우트
-- `src/components/portfolio`: 포트폴리오 UI 컴포넌트
-- `src/lib`: i18n, repository, graphql schema, env, util
-- `prisma`: schema, seed
-- `helm/portfolio`: Kubernetes Helm chart
-- `deploy`: ArgoCD Application 매니페스트
-- `.github/workflows/ci-cd.yml`: GitHub Actions CI/CD 파이프라인
-
-## 로컬 실행 (pnpm)
+## Local development and preview
 
 ```bash
-pnpm install
-pnpm prisma:generate
+pnpm install --frozen-lockfile
 pnpm dev
+pnpm build
+python3 -m http.server --directory out 3000
 ```
 
-- 개발 서버: `http://localhost:3000`
+The production build must generate `out/`. Run `node scripts/verify-static.mjs` before deployment.
 
-## 환경 변수
+## Content
 
-기본 템플릿은 `.env.example`을 참고하세요.
+Edit portfolio copy in `src/lib/site-content.ts`. This is a static deployment: do not add server-only data, cookies, database access, mail, or API calls.
 
-핵심 변수:
+## Deployment
 
-- `DATABASE_URL`
-- `REDIS_HOST`
-- `REDIS_PORT`
-- `REDIS_PASSWORD`
-- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_DOMAIN`, `SMTP_PROTOCOL`
-- `CONTACT_FROM_EMAIL`, `CONTACT_TO_EMAIL`
+GitHub Actions verifies each pull request and deploys only `main` or an explicit production manual run. It requires `AWS_STATIC_DEPLOY_ROLE_ARN`; OIDC trust and least-privilege permissions are in `infra/iam/`. They are setup documents only: an authorized operator must create the provider and role before CI deployment.
 
-## DB/캐시
+The GitHub `production` Environment must restrict deployment branches to `main` exactly. Its OIDC subject is `repo:seung-ju-org/portfolio:environment:production`; this branch restriction is required in addition to the workflow `main` condition.
 
-- ORM: Prisma
-- RDB: PostgreSQL
-- Cache: Redis
-- Portfolio/Career 데이터는 DB 기준으로 조회됩니다.
+Before first deployment, an authorized operator must back up the existing distribution configuration and bucket policy, then:
 
-마이그레이션/시드:
+1. Run `node scripts/deploy-static.mjs` to archive current config/policy and upload new files before the origin switch.
+2. Add `infra/s3/cloudfront-ssg-read-policy-statement.json` to the bucket policy after replacing `<ACCOUNT_ID>`. Preserve the existing `/www/*` statement.
+3. Publish `infra/cloudfront/canonical-route.js`, then run `CLOUDFRONT_VIEWER_REQUEST_FUNCTION_ARN=<published-arn> node scripts/prepare-cloudfront-config.mjs original.json proposed.json`. It changes only the known REST origin to `/ssg`, retains OAC `E2HR8K6NT1APV8`, uses managed CachingDisabled/Optimized policies, and makes both 403 and 404 return `/404.html` with HTTP 404.
+4. ETag-update the distribution, wait for deployment, and verify CloudFront before DNS.
+5. Add exact Route 53 A and AAAA aliases for `portfolio.seung-ju.com` to this distribution. Keep the wildcard, root, mail, and historical portfolio records unchanged.
 
-```bash
-pnpm prisma:generate
-pnpm prisma:push
-pnpm prisma:seed
-```
-
-## 테스트/품질
-
-```bash
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm test:coverage
-```
-
-현재 기준:
-
-- 테스트 통과
-- lint/typecheck 통과
-- coverage threshold 적용 (`vitest.config.ts`)
-
-## CI/CD
-
-### GitHub Actions
-
-파이프라인 파일:
-
-- `.github/workflows/ci-cd.yml`
-
-동작:
-
-1. `pnpm install/lint/typecheck/test/build`
-2. Docker Buildx 이미지 빌드/푸시 (`ghcr.io/seung-ju-org/portfolio`)
-3. `helm/portfolio/values.yaml`의 `image.tag` 갱신 커밋
-4. ArgoCD 자동 동기화
-
-### Helm / ArgoCD
-
-렌더 테스트:
-
-```bash
-helm template portfolio ./helm/portfolio -f ./helm/portfolio/values.yaml
-```
-
-ArgoCD 앱 배포:
-
-```bash
-kubectl apply -f deploy/argocd-application.yaml
-```
-
-Ingress host:
-
-- `portfolio.seung-ju.com`
-
-운영 메일 전송을 쓰려면 Helm `secretEnv`에 아래 값이 반드시 채워져 있어야 합니다.
-
-- `SMTP_HOST`
-- `SMTP_PORT`
-- `SMTP_USER`
-- `SMTP_PASS`
-- `SMTP_DOMAIN`
-- `SMTP_PROTOCOL`
-- `CONTACT_TO_EMAIL`
-- `CONTACT_FROM_EMAIL`
-
-## 운영 메모
-
-- GitHub 원격: `git@github.com:seung-ju-org/portfolio.git`
-- 기본 브랜치: `main`
-- Node 패키지 매니저: `pnpm` (lockfile 포함)
+`node scripts/deploy-static.mjs` uploads hashed assets before HTML, never deletes `/www` or bucket objects, archives the build and configuration backups under `releases/`, then invalidates concrete mutable HTML, RSC/data, metadata, and public paths while excluding `/_next/static/**`. Roll back by restoring an archived build beneath `ssg/` and invalidating those paths; use a fresh ETag when restoring the saved distribution configuration.
