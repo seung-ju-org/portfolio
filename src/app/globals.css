@@ -842,6 +842,7 @@ footer {
 }
 .copy-feedback {
   display: block;
+  flex-basis: 100%;
   min-height: 1.2em;
   margin-top: 8px;
   color: var(--accent);
