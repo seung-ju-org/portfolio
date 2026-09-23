@@ -6,7 +6,15 @@ import { pagePath } from "./paths";
 
 const copy: Record<
   Locale,
-  { profile: string; capabilities: string; experience: string; work: string; contact: string; education: string }
+  {
+    profile: string;
+    capabilities: string;
+    experience: string;
+    work: string;
+    contact: string;
+    education: string;
+    contactMethod: string;
+  }
 > = {
   ko: {
     profile: "소개",
@@ -14,7 +22,8 @@ const copy: Record<
     experience: "최근 경력",
     work: "주요 작업",
     contact: "함께 이야기해요",
-    education: "교육"
+    education: "교육",
+    contactMethod: "메일과 LinkedIn으로 연락하실 수 있습니다."
   },
   en: {
     profile: "Profile",
@@ -22,7 +31,8 @@ const copy: Record<
     experience: "Recent experience",
     work: "Selected work",
     contact: "Let’s work together",
-    education: "Education"
+    education: "Education",
+    contactMethod: "You can reach me by email or LinkedIn."
   },
   ja: {
     profile: "プロフィール",
@@ -30,7 +40,8 @@ const copy: Record<
     experience: "最近の経歴",
     work: "主な仕事",
     contact: "ご相談ください",
-    education: "学歴"
+    education: "学歴",
+    contactMethod: "メールまたはLinkedInからご連絡いただけます。"
   }
 };
 export function SitePage({ locale, page, content }: { locale: Locale; page: PageKind; content: SiteContent }) {
@@ -41,47 +52,66 @@ export function SitePage({ locale, page, content }: { locale: Locale; page: Page
     <>
       <Header locale={locale} page={page} />
       <main className={`site-main page-${page}`}>
-        <section className={`hero ${home ? "" : "page-intro"}`}>
-          <div>
+        <div className="masthead">
+          <span>
+            {content.profile.name} / {content.profile.location}
+          </span>
+          <Link href={pagePath(locale, "contact")}>Contact ↗</Link>
+        </div>
+        <section className={`hero ${home ? "hero-home" : "page-intro"}`}>
+          <div className="hero-copy">
             <p className="eyebrow">
               {home
-                ? content.profile.location
+                ? `${content.profile.name} · ${content.profile.role}`
                 : text[page === "portfolio" ? "work" : page === "contact" ? "contact" : "profile"]}
             </p>
             <h1>
               {home ? (
                 <>
-                  {content.profile.name}
+                  SEUNG JU
                   <br />
-                  <em>{content.profile.role}</em>
+                  OH
                 </>
               ) : page === "about" ? (
                 text.profile
               ) : page === "portfolio" ? (
                 text.work
+              ) : page === "contact" ? (
+                "Contact"
               ) : (
                 text.contact
               )}
             </h1>
-            <p className="lede">{home ? content.profile.headline : content.profile.summary}</p>
+            <p className="lede">
+              {home ? content.profile.headline : page === "contact" ? text.contactMethod : content.profile.summary}
+            </p>
             {home && <p className="current-summary">{content.profile.current}</p>}
             {home && (
-              <Link className="text-link" href={pagePath(locale, "portfolio")}>
-                {text.work} <span>↓</span>
-              </Link>
+              <div className="hero-actions">
+                <Link className="button button-primary" href={pagePath(locale, "portfolio")}>
+                  {text.work} <span>↗</span>
+                </Link>
+                <Link className="button button-secondary" href={pagePath(locale, "about")}>
+                  {text.profile}
+                </Link>
+              </div>
             )}
           </div>
-          {home && <HeroScene />}
+          {home && (
+            <div className="hero-art">
+              <HeroScene />
+            </div>
+          )}
         </section>
         {home && (
-          <section className="summary">
-            <p className="section-number">01 / {text.profile}</p>
+          <section className="intro">
+            <p className="section-kicker">01 / {text.profile}</p>
             <p>{content.profile.summary}</p>
           </section>
         )}
         {about && (
           <section className="essay">
-            <p className="section-number">01 / {text.profile}</p>
+            <p className="section-kicker">01 / {text.profile}</p>
             <div>
               {content.about.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
@@ -91,14 +121,15 @@ export function SitePage({ locale, page, content }: { locale: Locale; page: Page
         )}
         {(home || about) && (
           <section className="capabilities">
-            <p className="section-number">
-              {home ? "02" : "02"} / {text.capabilities}
-            </p>
-            <div>
+            <div className="section-heading">
+              <p className="section-kicker">02 / {text.capabilities}</p>
+              <h2>Capabilities</h2>
+            </div>
+            <div className="capability-grid">
               {content.capabilities.map((capability, index) => (
                 <article key={capability.title}>
                   <span>0{index + 1}</span>
-                  <h2>{capability.title}</h2>
+                  <h3>{capability.title}</h3>
                   <p>{capability.description}</p>
                   <small>{capability.skills.join(" · ")}</small>
                 </article>
@@ -108,33 +139,38 @@ export function SitePage({ locale, page, content }: { locale: Locale; page: Page
         )}
         {(home || about) && (
           <section className="timeline">
-            <p className="section-number">
-              {home ? "03" : "03"} / {text.experience}
-            </p>
-            {content.careers.slice(0, home ? 3 : undefined).map((career) => (
-              <article key={career.company + career.period}>
-                <p>
-                  {career.period}
-                  {career.location ? ` · ${career.location}` : ""}
-                </p>
-                <h2>{career.company}</h2>
-                <strong>{career.role}</strong>
-                <p>{career.summary}</p>
-                {about && (
-                  <>
-                    <ul>
-                      {career.highlights.map((highlight) => (
-                        <li key={highlight}>{highlight}</li>
-                      ))}
-                    </ul>
-                    <small>{career.skills.join(" · ")}</small>
-                  </>
-                )}
-              </article>
-            ))}
+            <div className="section-heading">
+              <p className="section-kicker">03 / {text.experience}</p>
+              <h2>Experience</h2>
+            </div>
+            <div className="timeline-list">
+              {content.careers.slice(0, home ? 3 : undefined).map((career) => (
+                <article key={career.company + career.period}>
+                  <p>
+                    {career.period}
+                    {career.location ? ` · ${career.location}` : ""}
+                  </p>
+                  <div>
+                    <h3>{career.company}</h3>
+                    <strong>{career.role}</strong>
+                    <p>{career.summary}</p>
+                    {about && (
+                      <>
+                        <ul>
+                          {career.highlights.map((highlight) => (
+                            <li key={highlight}>{highlight}</li>
+                          ))}
+                        </ul>
+                        <small>{career.skills.join(" · ")}</small>
+                      </>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
             {about && (
               <div className="education">
-                <p className="section-number">{text.education}</p>
+                <p className="section-kicker">04 / {text.education}</p>
                 {content.education.map((item) => (
                   <div key={item.school}>
                     <p>
@@ -151,9 +187,12 @@ export function SitePage({ locale, page, content }: { locale: Locale; page: Page
         )}
         {(home || page === "portfolio") && (
           <section className="work">
-            <p className="section-number">
-              {home ? "04" : "01"} / {text.work}
-            </p>
+            <div className="section-heading">
+              <p className="section-kicker">
+                {home ? "04" : "01"} / {text.work}
+              </p>
+              <h2>Selected work</h2>
+            </div>
             {page === "portfolio" ? (
               <ProjectFilter locale={locale} projects={content.projects} />
             ) : (
@@ -172,10 +211,10 @@ export function SitePage({ locale, page, content }: { locale: Locale; page: Page
         )}
         {(home || page === "contact") && (
           <section className="contact">
-            <p className="section-number">{home ? "05" : "01"} / CONTACT</p>
+            <p className="section-kicker">{home ? "05" : "01"} / CONTACT</p>
             <h2>{text.contact}</h2>
             <CopyEmail email={content.profile.email} locale={locale} />
-            <p>
+            <p className="social-links">
               <a href={content.profile.linkedin} rel="noreferrer" target="_blank">
                 LinkedIn ↗
               </a>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Locale, PageKind, SiteContent } from "@/lib/site-content";
 import { localePath, pagePath } from "./paths";
 
@@ -18,28 +18,7 @@ export { localePath, pagePath } from "./paths";
 
 export function Header({ locale, page }: { locale: Locale; page: PageKind }) {
   const [open, setOpen] = useState(false);
-  const [dark, setDark] = useState(false);
   const pathname = usePathname();
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const saved = localStorage.getItem("portfolio-theme");
-    const apply = (value: boolean) => {
-      document.documentElement.classList.toggle("dark", value);
-      setDark(value);
-    };
-    apply(saved ? saved === "dark" : media.matches);
-    const changed = (event: MediaQueryListEvent) => {
-      if (!localStorage.getItem("portfolio-theme")) apply(event.matches);
-    };
-    media.addEventListener("change", changed);
-    return () => media.removeEventListener("change", changed);
-  }, []);
-  const toggleTheme = () => {
-    const next = !dark;
-    localStorage.setItem("portfolio-theme", next ? "dark" : "light");
-    document.documentElement.classList.toggle("dark", next);
-    setDark(next);
-  };
   return (
     <header className="site-header">
       <Link className="wordmark" href={pagePath(locale, "home")}>
@@ -77,9 +56,6 @@ export function Header({ locale, page }: { locale: Locale; page: PageKind }) {
             </Link>
           ))}
         </div>
-        <button aria-label="Change theme" className="theme-button" onClick={toggleTheme} type="button">
-          {dark ? "LIGHT" : "DARK"}
-        </button>
       </nav>
     </header>
   );
@@ -88,7 +64,8 @@ export function Header({ locale, page }: { locale: Locale; page: PageKind }) {
 type Project = SiteContent["projects"][number];
 export function ProjectCard({ project, full = false }: { project: Project; full?: boolean }) {
   return (
-    <article className="project">
+    <article className={`project project-${project.id}`}>
+      <div aria-hidden="true" className="project-cover" />
       <p>
         {project.company || "Independent"} · {project.period}
       </p>
