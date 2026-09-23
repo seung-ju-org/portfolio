@@ -47,6 +47,14 @@ import { evidenceProjects, type ProjectCategory, type ProjectImage } from "./pro
 type Localized<T> = Record<Locale, T>;
 const localized = <T>(ko: T, en: T, ja: T): Localized<T> => ({ ko, en, ja });
 
+// Captions describe the screen a visitor is looking at; where the file came from belongs in provenance.
+const archiveSource = localized("이전 작업 자료", "Earlier work archive", "過去の作業資料");
+const imageCaptions = {
+  "3": localized("SKKU IMBA 웹사이트 화면", "SKKU IMBA website", "SKKU IMBA Webサイト画面"),
+  "7": localized("HomeGrit 모바일 앱 화면", "HomeGrit mobile app", "HomeGritモバイルアプリ画面"),
+  "19": localized("ENSolution 대시보드 화면", "ENSolution dashboard", "ENSolutionダッシュボード画面")
+};
+
 const profile = localized(
   {
     name: "오승주",
@@ -308,16 +316,11 @@ export function getSiteContent(locale: Locale): SiteContent {
             : "以前のポートフォリオに掲載されたBankmallローン比較Web画面",
       caption:
         locale === "ko"
-          ? "이전 포트폴리오 수록 화면"
+          ? "뱅크몰 대출 비교 웹 화면"
           : locale === "en"
-            ? "Archived portfolio screen"
-            : "以前のポートフォリオ掲載画面",
-      provenance:
-        locale === "ko"
-          ? "이전 포트폴리오 PDF"
-          : locale === "en"
-            ? "Archived portfolio PDF"
-            : "以前のポートフォリオPDF",
+            ? "Bankmall loan comparison web"
+            : "Bankmallローン比較Web画面",
+      provenance: archiveSource[locale],
       fit: "contain"
     };
     projects.splice(bankmallWebIndex, 1);
@@ -357,30 +360,15 @@ export function getSiteContent(locale: Locale): SiteContent {
                 ? "以前のポートフォリオに掲載されたHomeGritモバイルアプリ画面"
                 : "ENSolution公開ダッシュボード画像"
             : image[1],
-      caption:
-        locale === "ko"
-          ? project.id === "19"
-            ? "2026년 확인한 공개 서비스 이미지"
-            : "이전 포트폴리오 수록 화면"
-          : locale === "ja"
-            ? project.id === "19"
-              ? "2026年に確認した公開サービス画像"
-              : "以前のポートフォリオ掲載画面"
-            : project.id === "19"
-              ? "Current public service image, viewed 2026-09-23"
-              : "Archived portfolio screen",
+      caption: imageCaptions[project.id as keyof typeof imageCaptions][locale],
       provenance:
-        locale === "ko"
-          ? project.id === "19"
+        project.id === "19"
+          ? locale === "ko"
             ? "ENSolution 공개 사이트"
-            : "이전 포트폴리오 PDF"
-          : locale === "ja"
-            ? project.id === "19"
+            : locale === "ja"
               ? "ENSolution公開サイト"
-              : "以前のポートフォリオPDF"
-            : project.id === "19"
-              ? "ENSolution public site"
-              : "Archived portfolio PDF",
+              : "ENSolution public site"
+          : archiveSource[locale],
       fit: "contain"
     };
   }
@@ -416,14 +404,25 @@ export function getSiteContent(locale: Locale): SiteContent {
     company: locale === "ko" ? "유니코아" : "Unicorea",
     period: locale === "ko" ? "2026.04–현재" : locale === "ja" ? "2026.04–現在" : "2026.04–Present",
     role: locale === "ko" ? "Full-Stack Engineer" : "Full-Stack Engineer",
-    achievements: [
+    achievements:
       locale === "ko"
-        ? "가맹점 웹, 정산 API, 공통 배포·운영 환경 개발"
+        ? [
+            "React·TypeScript 기반 가맹점 웹과 관리자 기능 개발",
+            "Kotlin·Spring Boot 기반 정산·통계 API와 데이터 처리",
+            "Jenkins·Kubernetes·Helm·ArgoCD 기반 공통 배포 환경 구성"
+          ]
         : locale === "en"
-          ? "Developing merchant web, settlement APIs, and shared deployment operations"
-          : "加盟店Web、精算API、共通デプロイ・運用環境を開発"
-    ],
-    stack: "React, TypeScript, Kotlin, Spring Boot, Kubernetes",
+          ? [
+              "Merchant web and admin features built with React and TypeScript",
+              "Settlement and statistics APIs and data processing on Kotlin and Spring Boot",
+              "Shared deployment environment on Jenkins, Kubernetes, Helm, and ArgoCD"
+            ]
+          : [
+              "React・TypeScriptによる加盟店Webと管理機能の開発",
+              "Kotlin・Spring Bootによる精算・統計APIとデータ処理",
+              "Jenkins・Kubernetes・Helm・ArgoCDによる共通デプロイ環境の構築"
+            ],
+    stack: "React, TypeScript, Kotlin, Spring Boot, Jenkins, Kubernetes, Helm, ArgoCD",
     links: undefined
   });
   projects.push(...evidenceProjects[locale], ...additionalProjects[locale]);

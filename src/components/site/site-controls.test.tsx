@@ -48,7 +48,7 @@ describe("site controls", () => {
     fireEvent.click(design);
     expect(design).toHaveAttribute("aria-pressed", "true");
     fireEvent.keyDown(screen.getByRole("group", { name: "Work category" }), { key: "Escape" });
-    expect(screen.getByRole("button", { name: "All work" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "All categories" })).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByText("Two")).toBeInTheDocument();
     expect(document.querySelector(".project-grid")?.hasAttribute("data-filter-transition")).toBe(true);
   });

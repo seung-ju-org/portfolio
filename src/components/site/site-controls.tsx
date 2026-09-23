@@ -206,6 +206,7 @@ const filterLabels: Record<
   Locale,
   {
     all: string;
+    allCategories: string;
     other: string;
     label: string;
     category: string;
@@ -214,7 +215,8 @@ const filterLabels: Record<
   }
 > = {
   ko: {
-    all: "전체 작업",
+    all: "전체 회사",
+    allCategories: "전체 분류",
     other: "기타",
     label: "회사별 작업 필터",
     category: "작업 분류",
@@ -222,7 +224,8 @@ const filterLabels: Record<
     categories: { work: "개발", design: "디자인", archive: "아카이브", opensource: "오픈 소스" }
   },
   en: {
-    all: "All work",
+    all: "All companies",
+    allCategories: "All categories",
     other: "Other",
     label: "Filter work by company",
     category: "Work category",
@@ -230,7 +233,8 @@ const filterLabels: Record<
     categories: { work: "Development", design: "Design", archive: "Archive", opensource: "Open source" }
   },
   ja: {
-    all: "すべての作品",
+    all: "すべての会社",
+    allCategories: "すべてのカテゴリ",
     other: "その他",
     label: "会社で作品を絞り込む",
     category: "作品カテゴリ",
@@ -279,7 +283,7 @@ export function ProjectFilter({ projects, locale }: { projects: Project[]; local
       >
         {(["all", ...categories] as const).map((value) => (
           <button aria-pressed={category === value} key={value} onClick={() => setCategory(value)} type="button">
-            {value === "all" ? labels.all : labels.categories[value]}
+            {value === "all" ? labels.allCategories : labels.categories[value]}
           </button>
         ))}
       </div>

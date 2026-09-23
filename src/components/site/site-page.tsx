@@ -192,12 +192,13 @@ export function SitePage({ locale, page, content }: { locale: Locale; page: Page
         )}
         {(home || page === "portfolio") && (
           <section className="work">
-            <div className="section-heading">
-              <p className="section-kicker">
-                {home ? "04" : "01"} / {text.work}
-              </p>
-              <h2>Selected work</h2>
-            </div>
+            {/* The portfolio page hero already carries this title, so a second heading only repeats it. */}
+            {home && (
+              <div className="section-heading">
+                <p className="section-kicker">04 / {text.work}</p>
+                <h2>Selected work</h2>
+              </div>
+            )}
             {page === "portfolio" ? (
               <ProjectFilter locale={locale} projects={content.projects} />
             ) : (

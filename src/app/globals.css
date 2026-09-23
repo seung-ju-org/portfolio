@@ -485,6 +485,11 @@ select:focus-visible {
   color: #c9c4ba;
   font-size: 0.72rem;
 }
+/* Without a cover image the card runs short, and bottom-aligning the stack line opens a gap
+   between it and the copy above. Keep the text block together instead. */
+.project:not(:has(.project-media)) small {
+  margin-top: 12px;
+}
 .project > a {
   margin-top: 13px;
   font-size: 0.76rem;
