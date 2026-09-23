@@ -561,6 +561,14 @@ footer {
   letter-spacing: 0.08em;
 }
 @media (max-width: 760px) {
+  /* The nav pill is fixed 12px from the bottom and 48px tall, so anything that ends at the
+     document or anchor bottom lands underneath it. Keep that band clear. */
+  html {
+    scroll-padding-bottom: 60px;
+  }
+  body {
+    padding-bottom: 60px;
+  }
   .site-header {
     top: auto;
     bottom: 12px;
