@@ -4,6 +4,13 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 const motionSelector = ".section-heading, .capability-grid article, .timeline-list article, .page-home .project";
+const motionThreshold = 0.08;
+
+// A pending target that sits above the viewport can never reach the observer threshold again while
+// scrolling down, so scroll restoration and jump scrolls would leave it hidden. Reveal those directly.
+export function scrolledPast({ bottom, height }: { bottom: number; height: number }) {
+  return bottom < height * motionThreshold;
+}
 
 export function SiteMotion() {
   const anchor = useRef<HTMLSpanElement>(null);
@@ -31,10 +38,17 @@ export function SiteMotion() {
         element.style.removeProperty("--light-y");
       });
     const showAll = () => targets.forEach((target) => (target.dataset.motion = "shown"));
+    const revealPassed = () =>
+      targets.forEach((target) => {
+        if (target.dataset.motion !== "pending" || !scrolledPast(target.getBoundingClientRect())) return;
+        target.dataset.motion = "shown";
+        observer?.unobserve(target);
+      });
     const updateProgress = () => {
       frame = 0;
       const max = document.documentElement.scrollHeight - window.innerHeight;
       root.style.setProperty("--scroll-progress", String(max > 0 ? window.scrollY / max : 0));
+      revealPassed();
     };
     const scheduleProgress = () => {
       if (!frame) frame = requestAnimationFrame(updateProgress);
@@ -67,7 +81,7 @@ export function SiteMotion() {
                     observer?.unobserve(entry.target);
                   }
                 }),
-              { threshold: 0.08 }
+              { threshold: motionThreshold }
             );
       targets.forEach((target) => {
         target.dataset.motion = target.getBoundingClientRect().top <= window.innerHeight ? "shown" : "pending";
