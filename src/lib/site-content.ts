@@ -425,7 +425,7 @@ export function getSiteContent(locale: Locale): SiteContent {
           ? "Daechang Brassone Web Development"
           : "大昌ブラスワンWeb開発",
     company: "크림쿠키스튜디오",
-    period: locale === "ko" ? "2026.03–현재" : locale === "ja" ? "2026.03–現在" : "2026.03–Present",
+    period: "2026.03–2026.09",
     role: locale === "ko" ? "웹 개발" : locale === "en" ? "Web development" : "Web開発",
     // Sourced from the seung-ju-org/brassone repository itself: a pnpm/Turborepo monorepo with
     // apps/web and apps/admin, shared domain/application/infrastructure packages, and deploys/helm.
