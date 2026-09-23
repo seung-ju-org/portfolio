@@ -34,7 +34,7 @@ export const fallbackProjects: LocalizedCareerProject[] = [
       en: "Bankmall Co., Ltd. / Actbase LLC",
       ja: "Bankmall株式会社 / Actbase合同会社"
     },
-    period: { ko: "2022.11 ~ 2023.05 (약 7개월)", en: "2022.11 - 2023.05 (about 7 months)", ja: "2022.11 - 2023.05（約7か月）" },
+    period: { ko: "2022.11 ~ 2023.03", en: "2022.11 - 2023.03", ja: "2022.11 - 2023.03" },
     role: {
       ko: "뱅크몰 Application 개발",
       en: "Developed the Bankmall mobile application",
@@ -50,8 +50,12 @@ export const fallbackProjects: LocalizedCareerProject[] = [
   {
     id: 2,
     title: { ko: "Bizprint 리뉴얼", en: "Bizprint Renewal", ja: "Bizprint リニューアル" },
-    company: { ko: "Maybeone / 액트베이스 유한책임회사", en: "Maybeone / Actbase LLC", ja: "Maybeone / Actbase合同会社" },
-    period: { ko: "2023.01 ~ 2023.05 (약 4개월)", en: "2023.01 - 2023.05 (about 4 months)", ja: "2023.01 - 2023.05（約4か月）" },
+    company: {
+      ko: "Maybeone / 액트베이스 유한책임회사",
+      en: "Maybeone / Actbase LLC",
+      ja: "Maybeone / Actbase合同会社"
+    },
+    period: { ko: "2023.01 ~ 2023.04", en: "2023.01 - 2023.04", ja: "2023.01 - 2023.04" },
     role: { ko: "Front 개발 총괄", en: "Led front-end development", ja: "フロントエンド開発を統括" },
     achievements: {
       ko: ["Next.js 기반 Front/CMS 구축"],
@@ -63,8 +67,16 @@ export const fallbackProjects: LocalizedCareerProject[] = [
   {
     id: 3,
     title: { ko: "SKKU IMBA 리뉴얼", en: "SKKU IMBA Renewal", ja: "SKKU IMBA リニューアル" },
-    company: { ko: "신세계 아이앤씨 / 액트베이스 유한책임회사", en: "Shinsegae I&C / Actbase LLC", ja: "新世界I&C / Actbase合同会社" },
-    period: { ko: "2023.01 ~ 2023.03 (약 3개월)", en: "2023.01 - 2023.03 (about 3 months)", ja: "2023.01 - 2023.03（約3か月）" },
+    company: {
+      ko: "신세계 아이앤씨 / 액트베이스 유한책임회사",
+      en: "Shinsegae I&C / Actbase LLC",
+      ja: "新世界I&C / Actbase合同会社"
+    },
+    period: {
+      ko: "2023.01 ~ 2023.03 (약 3개월)",
+      en: "2023.01 - 2023.03 (about 3 months)",
+      ja: "2023.01 - 2023.03（約3か月）"
+    },
     role: { ko: "Front, CMS, API 개발", en: "Developed front-end, CMS, and API", ja: "フロントエンド・CMS・APIを開発" },
     achievements: {
       ko: ["React 기반 Web/CMS 개발", "Spring Boot JPA 기반 API Server 개발"],
@@ -76,8 +88,16 @@ export const fallbackProjects: LocalizedCareerProject[] = [
   {
     id: 4,
     title: { ko: "Pangaia SPVRKD 개발", en: "Pangaia SPVRKD Development", ja: "Pangaia SPVRKD 開発" },
-    company: { ko: "신세계 아이앤씨 / 액트베이스 유한책임회사", en: "Shinsegae I&C / Actbase LLC", ja: "新世界I&C / Actbase合同会社" },
-    period: { ko: "2022.07 ~ 2022.12 (약 6개월)", en: "2022.07 - 2022.12 (about 6 months)", ja: "2022.07 - 2022.12（約6か月）" },
+    company: {
+      ko: "신세계 아이앤씨 / 액트베이스 유한책임회사",
+      en: "Shinsegae I&C / Actbase LLC",
+      ja: "新世界I&C / Actbase合同会社"
+    },
+    period: {
+      ko: "2022.07 ~ 2022.12 (약 6개월)",
+      en: "2022.07 - 2022.12 (about 6 months)",
+      ja: "2022.07 - 2022.12（約6か月）"
+    },
     role: { ko: "프로젝트 개발 총괄", en: "Led overall project development", ja: "プロジェクト開発全体をリード" },
     achievements: {
       ko: [
@@ -107,8 +127,16 @@ export const fallbackProjects: LocalizedCareerProject[] = [
   {
     id: 5,
     title: { ko: "mKWP 앱 유지보수", en: "mKWP App Maintenance", ja: "mKWP アプリ保守" },
-    period: { ko: "2022.07 ~ 2023.01 (약 7개월)", en: "2022.07 - 2023.01 (about 7 months)", ja: "2022.07 - 2023.01（約7か月）" },
-    role: { ko: "React Native 기반 mKWP 앱 유지보수", en: "Maintained mKWP app with React Native", ja: "React Native ベースの mKWP アプリ保守" },
+    period: {
+      ko: "2022.07 ~ 2023.01 (약 7개월)",
+      en: "2022.07 - 2023.01 (about 7 months)",
+      ja: "2022.07 - 2023.01（約7か月）"
+    },
+    role: {
+      ko: "React Native 기반 mKWP 앱 유지보수",
+      en: "Maintained mKWP app with React Native",
+      ja: "React Native ベースの mKWP アプリ保守"
+    },
     achievements: {
       ko: ["React Native 기반 mKWP 앱 유지보수"],
       en: ["Maintained mKWP app built with React Native"],
@@ -120,8 +148,16 @@ export const fallbackProjects: LocalizedCareerProject[] = [
     id: 6,
     title: { ko: "아이쿠카 고도화", en: "Aikuka Enhancement", ja: "Aikuka 高度化" },
     company: { ko: "아이쿠카 / 액트베이스 유한책임회사", en: "Aikuka / Actbase LLC", ja: "Aikuka / Actbase合同会社" },
-    period: { ko: "2022.06 ~ 2022.06 (약 1개월)", en: "2022.06 - 2022.06 (about 1 month)", ja: "2022.06 - 2022.06（約1か月）" },
-    role: { ko: "React Native 기반 아이쿠카 앱 개발", en: "Developed Aikuka app with React Native", ja: "React Native で Aikuka アプリを開発" },
+    period: {
+      ko: "2022.06 ~ 2022.06 (약 1개월)",
+      en: "2022.06 - 2022.06 (about 1 month)",
+      ja: "2022.06 - 2022.06（約1か月）"
+    },
+    role: {
+      ko: "React Native 기반 아이쿠카 앱 개발",
+      en: "Developed Aikuka app with React Native",
+      ja: "React Native で Aikuka アプリを開発"
+    },
     achievements: {
       ko: ["React Native 기반 아이쿠카 앱 개발"],
       en: ["Built Aikuka mobile app with React Native"],
@@ -132,8 +168,16 @@ export const fallbackProjects: LocalizedCareerProject[] = [
   {
     id: 7,
     title: { ko: "홈그릿 개발", en: "HomeGrit Development", ja: "HomeGrit 開発" },
-    company: { ko: "강앤킴파트너스 / 액트베이스 유한책임회사", en: "Kang & Kim Partners / Actbase LLC", ja: "Kang & Kim Partners / Actbase合同会社" },
-    period: { ko: "2022.03 ~ 2022.12 (약 10개월)", en: "2022.03 - 2022.12 (about 10 months)", ja: "2022.03 - 2022.12（約10か月）" },
+    company: {
+      ko: "강앤킴파트너스 / 액트베이스 유한책임회사",
+      en: "Kang & Kim Partners / Actbase LLC",
+      ja: "Kang & Kim Partners / Actbase合同会社"
+    },
+    period: {
+      ko: "2022.03 ~ 2022.12 (약 10개월)",
+      en: "2022.03 - 2022.12 (about 10 months)",
+      ja: "2022.03 - 2022.12（約10か月）"
+    },
     role: { ko: "프로젝트 개발 총괄", en: "Led overall project development", ja: "プロジェクト開発全体をリード" },
     achievements: {
       ko: [
@@ -165,21 +209,40 @@ export const fallbackProjects: LocalizedCareerProject[] = [
       en: "Bankmall Co., Ltd. / Actbase LLC",
       ja: "Bankmall株式会社 / Actbase合同会社"
     },
-    period: { ko: "2021.10 ~ 2022.03 (약 7개월)", en: "2021.10 - 2022.03 (about 7 months)", ja: "2021.10 - 2022.03（約7か月）" },
-    role: { ko: "Next.js 기반 Front 개발, React 기반 CMS 개발", en: "Developed Next.js frontend and React CMS", ja: "Next.js フロントと React CMS を開発" },
+    period: { ko: "2021.09 ~ 2022.03", en: "2021.09 - 2022.03", ja: "2021.09 - 2022.03" },
+    role: {
+      ko: "Next.js 기반 Front 개발, React 기반 CMS 개발",
+      en: "Developed Next.js frontend and React CMS",
+      ja: "Next.js フロントと React CMS を開発"
+    },
     achievements: {
       ko: ["대출비교 플랫폼 Front/CMS 개발", "운영/스테이징/개발 환경 구축"],
-      en: ["Built frontend and CMS for a loan comparison platform", "Set up production, staging, and development environments"],
+      en: [
+        "Built frontend and CMS for a loan comparison platform",
+        "Set up production, staging, and development environments"
+      ],
       ja: ["ローン比較プラットフォームのフロント/CMSを開発", "本番・ステージング・開発環境を構築"]
     },
     stack: "Next.js, React"
   },
   {
     id: 10,
-    title: { ko: "신세계 SSG EDU LCMS 리뉴얼", en: "Shinsegae SSG EDU LCMS Renewal", ja: "新世界 SSG EDU LCMS リニューアル" },
-    company: { ko: "신세계 아이앤씨 / 액트베이스 유한책임회사", en: "Shinsegae I&C / Actbase LLC", ja: "新世界I&C / Actbase合同会社" },
-    period: { ko: "2023.07 ~ 2023.09 (약 2개월)", en: "2023.07 - 2023.09 (about 2 months)", ja: "2023.07 - 2023.09（約2か月）" },
-    role: { ko: "PM 및 개발(API, Web, DevOps) 담당", en: "Handled PM and development (API, Web, DevOps)", ja: "PMおよび開発（API・Web・DevOps）を担当" },
+    title: {
+      ko: "신세계 SSG EDU LCMS 리뉴얼",
+      en: "Shinsegae SSG EDU LCMS Renewal",
+      ja: "新世界 SSG EDU LCMS リニューアル"
+    },
+    company: {
+      ko: "신세계 아이앤씨 / 액트베이스 유한책임회사",
+      en: "Shinsegae I&C / Actbase LLC",
+      ja: "新世界I&C / Actbase合同会社"
+    },
+    period: { ko: "2023.06 ~ 2023.09", en: "2023.06 - 2023.09", ja: "2023.06 - 2023.09" },
+    role: {
+      ko: "PM 및 개발(API, Web, DevOps) 담당",
+      en: "Handled PM and development (API, Web, DevOps)",
+      ja: "PMおよび開発（API・Web・DevOps）を担当"
+    },
     achievements: {
       ko: [
         "Spring Boot API를 컨테이너화하여 EKS 배포",
@@ -209,8 +272,16 @@ export const fallbackProjects: LocalizedCareerProject[] = [
     id: 11,
     title: { ko: "피플T 앱 지도 개발", en: "PeopleT Map Feature Development", ja: "PeopleT マップ機能開発" },
     company: { ko: "(주)탑피플", en: "TopPeople Co., Ltd.", ja: "TopPeople株式会社" },
-    period: { ko: "2023.10 ~ 2023.11 (약 1개월)", en: "2023.10 - 2023.11 (about 1 month)", ja: "2023.10 - 2023.11（約1か月）" },
-    role: { ko: "KakaoMap 기반 지도 기능 개발", en: "Developed map feature using KakaoMap", ja: "KakaoMap ベースの地図機能を開発" },
+    period: {
+      ko: "2023.10 ~ 2023.11 (약 1개월)",
+      en: "2023.10 - 2023.11 (about 1 month)",
+      ja: "2023.10 - 2023.11（約1か月）"
+    },
+    role: {
+      ko: "KakaoMap 기반 지도 기능 개발",
+      en: "Developed map feature using KakaoMap",
+      ja: "KakaoMap ベースの地図機能を開発"
+    },
     achievements: {
       ko: ["React App 지도 구성", "React Native WebView로 지도 연동"],
       en: ["Built map UI in React app", "Integrated map via React Native WebView"],
@@ -220,9 +291,21 @@ export const fallbackProjects: LocalizedCareerProject[] = [
   },
   {
     id: 12,
-    title: { ko: "마장동 하늘축산 관리자 개발", en: "Majangdong Sky Livestock Admin Development", ja: "馬場洞ハヌル畜産 管理者開発" },
-    company: { ko: "마장동 하늘축산 / 아이덴잇", en: "Majangdong Sky Livestock / Idenit", ja: "馬場洞ハヌル畜産 / Idenit" },
-    period: { ko: "2023.11 ~ 2023.12 (약 1개월)", en: "2023.11 - 2023.12 (about 1 month)", ja: "2023.11 - 2023.12（約1か月）" },
+    title: {
+      ko: "마장동 하늘축산 관리자 개발",
+      en: "Majangdong Sky Livestock Admin Development",
+      ja: "馬場洞ハヌル畜産 管理者開発"
+    },
+    company: {
+      ko: "마장동 하늘축산 / 아이덴잇",
+      en: "Majangdong Sky Livestock / Idenit",
+      ja: "馬場洞ハヌル畜産 / Idenit"
+    },
+    period: {
+      ko: "2023.11 ~ 2023.12 (약 1개월)",
+      en: "2023.11 - 2023.12 (about 1 month)",
+      ja: "2023.11 - 2023.12（約1か月）"
+    },
     role: { ko: "관리자 웹 개발", en: "Developed admin web", ja: "管理者Webを開発" },
     achievements: {
       ko: ["네이버 상품/QR 코드 연계 주문 기능 구현"],
@@ -236,7 +319,11 @@ export const fallbackProjects: LocalizedCareerProject[] = [
     title: { ko: "청호나이스 CS PHP 개발", en: "Chungho Nice CS PHP Development", ja: "チョンホナイス CS PHP 開発" },
     company: { ko: "청호나이스 / 아이덴잇", en: "Chungho Nice / Idenit", ja: "チョンホナイス / Idenit" },
     period: { ko: "2024.01 ~ 2024.03", en: "2024.01 - 2024.03", ja: "2024.01 - 2024.03" },
-    role: { ko: "청호나이스 고객센터 전체 개발", en: "Developed full Chungho customer center", ja: "チョンホ顧客センター全体を開発" },
+    role: {
+      ko: "청호나이스 고객센터 전체 개발",
+      en: "Developed full Chungho customer center",
+      ja: "チョンホ顧客センター全体を開発"
+    },
     achievements: {
       ko: ["PHP 5.2 기반 고객센터 기능 구축 및 운영"],
       en: ["Built and operated customer center features on PHP 5.2"],
@@ -247,10 +334,18 @@ export const fallbackProjects: LocalizedCareerProject[] = [
   },
   {
     id: 14,
-    title: { ko: "틴커 관리자 백엔드 개발", en: "Tinker Admin Backend Development", ja: "Tinker 管理者バックエンド開発" },
+    title: {
+      ko: "틴커 관리자 백엔드 개발",
+      en: "Tinker Admin Backend Development",
+      ja: "Tinker 管理者バックエンド開発"
+    },
     company: { ko: "틴커 / 디몬스터", en: "Tinker / Dmonster", ja: "Tinker / Dmonster" },
     period: { ko: "2024.03 ~ 2024.04", en: "2024.03 - 2024.04", ja: "2024.03 - 2024.04" },
-    role: { ko: "쇼핑몰 관리자 백엔드 구축", en: "Built shopping mall admin backend", ja: "EC管理者バックエンドを構築" },
+    role: {
+      ko: "쇼핑몰 관리자 백엔드 구축",
+      en: "Built shopping mall admin backend",
+      ja: "EC管理者バックエンドを構築"
+    },
     achievements: {
       ko: ["NestJS 기반 관리자 API 설계/구현"],
       en: ["Designed and implemented admin APIs with NestJS"],
@@ -260,10 +355,18 @@ export const fallbackProjects: LocalizedCareerProject[] = [
   },
   {
     id: 15,
-    title: { ko: "제프월드 쇼핑몰 개발", en: "JEP World E-commerce Development", ja: "JEP World ショッピングモール開発" },
+    title: {
+      ko: "제프월드 쇼핑몰 개발",
+      en: "JEP World E-commerce Development",
+      ja: "JEP World ショッピングモール開発"
+    },
     company: { ko: "제프 / 디몬스터", en: "JEP / Dmonster", ja: "JEP / Dmonster" },
     period: { ko: "2024.04 ~ 2024.08", en: "2024.04 - 2024.08", ja: "2024.04 - 2024.08" },
-    role: { ko: "사용자/판매자/관리자 웹 및 백엔드 구축", en: "Built user/seller/admin web and backend", ja: "ユーザー/販売者/管理者Webとバックエンドを構築" },
+    role: {
+      ko: "사용자/판매자/관리자 웹 및 백엔드 구축",
+      en: "Built user/seller/admin web and backend",
+      ja: "ユーザー/販売者/管理者Webとバックエンドを構築"
+    },
     achievements: {
       ko: ["Next.js 웹사이트 구축", "Spring Boot 기반 백엔드 Application 구축"],
       en: ["Built website with Next.js", "Built backend application with Spring Boot"],
@@ -273,7 +376,11 @@ export const fallbackProjects: LocalizedCareerProject[] = [
   },
   {
     id: 16,
-    title: { ko: "전립선 자가진단 무료 설문조사 사이트 구축", en: "Prostate Self-Diagnosis Survey Site", ja: "前立腺セルフ診断アンケートサイト構築" },
+    title: {
+      ko: "전립선 자가진단 무료 설문조사 사이트 구축",
+      en: "Prostate Self-Diagnosis Survey Site",
+      ja: "前立腺セルフ診断アンケートサイト構築"
+    },
     company: { ko: "주식회사 에이엔드", en: "AEND Co., Ltd.", ja: "AEND株式会社" },
     period: { ko: "2024.04", en: "2024.04", ja: "2024.04" },
     role: { ko: "설문조사 사이트 구축", en: "Built survey website", ja: "アンケートサイトを構築" },
@@ -287,10 +394,18 @@ export const fallbackProjects: LocalizedCareerProject[] = [
   },
   {
     id: 17,
-    title: { ko: "하누리 IOT 어플리케이션 개발", en: "Hanuri IoT Application Development", ja: "Hanuri IoT アプリ開発" },
+    title: {
+      ko: "하누리 IOT 어플리케이션 개발",
+      en: "Hanuri IoT Application Development",
+      ja: "Hanuri IoT アプリ開発"
+    },
     company: { ko: "하누리 / 디몬스터", en: "Hanuri / Dmonster", ja: "Hanuri / Dmonster" },
     period: { ko: "2024.07 ~ 2024.08", en: "2024.07 - 2024.08", ja: "2024.07 - 2024.08" },
-    role: { ko: "IOT 연동 모바일 앱 개발", en: "Developed IoT-integrated mobile app", ja: "IoT連携モバイルアプリを開発" },
+    role: {
+      ko: "IOT 연동 모바일 앱 개발",
+      en: "Developed IoT-integrated mobile app",
+      ja: "IoT連携モバイルアプリを開発"
+    },
     achievements: {
       ko: ["Bluetooth 기반 전방감지/자이로센서 알림 기능 구현"],
       en: ["Implemented Bluetooth-based front detection and gyro-sensor alerts"],
@@ -299,15 +414,26 @@ export const fallbackProjects: LocalizedCareerProject[] = [
     stack: "React Native, Bluetooth",
     links: [
       { label: "AOS", url: "https://play.google.com/store/apps/details?id=com.hanuri&pli=1" },
-      { label: "iOS", url: "https://apps.apple.com/kr/app/%ED%95%98%EB%88%84%EB%A6%AC-%EC%95%88%EC%A0%84%EC%A7%80%ED%82%B4%EC%9D%B4/id6550891684" }
+      {
+        label: "iOS",
+        url: "https://apps.apple.com/kr/app/%ED%95%98%EB%88%84%EB%A6%AC-%EC%95%88%EC%A0%84%EC%A7%80%ED%82%B4%EC%9D%B4/id6550891684"
+      }
     ]
   },
   {
     id: 18,
-    title: { ko: "한인학생회 고도화 및 서버 마이그레이션", en: "Korean Student Association Upgrade & Server Migration", ja: "韓人学生会 高度化・サーバーマイグレーション" },
+    title: {
+      ko: "한인학생회 고도화 및 서버 마이그레이션",
+      en: "Korean Student Association Upgrade & Server Migration",
+      ja: "韓人学生会 高度化・サーバーマイグレーション"
+    },
     company: { ko: "한인교류회 / 디몬스터", en: "Korean Association / Dmonster", ja: "韓人交流会 / Dmonster" },
     period: { ko: "2024.08 ~ 2024.09", en: "2024.08 - 2024.09", ja: "2024.08 - 2024.09" },
-    role: { ko: "운영 고도화 및 인프라 마이그레이션", en: "Upgraded operations and migrated infrastructure", ja: "運用高度化とインフラ移行を実施" },
+    role: {
+      ko: "운영 고도화 및 인프라 마이그레이션",
+      en: "Upgraded operations and migrated infrastructure",
+      ja: "運用高度化とインフラ移行を実施"
+    },
     achievements: {
       ko: [
         "PHP-CGI -> PHP-FPM 전환",
@@ -368,7 +494,11 @@ export const fallbackProjects: LocalizedCareerProject[] = [
     title: { ko: "베테랑스 백엔드 개발", en: "Veterans Backend Development", ja: "Veterans バックエンド開発" },
     company: { ko: "베테랑스 / 디몬스터", en: "Veterans / Dmonster", ja: "Veterans / Dmonster" },
     period: { ko: "2025.01 ~ 2025.03", en: "2025.01 - 2025.03", ja: "2025.01 - 2025.03" },
-    role: { ko: "교육 플랫폼 관리자 백엔드 개발", en: "Developed backend for education platform admin", ja: "教育プラットフォーム管理者向けバックエンドを開発" },
+    role: {
+      ko: "교육 플랫폼 관리자 백엔드 개발",
+      en: "Developed backend for education platform admin",
+      ja: "教育プラットフォーム管理者向けバックエンドを開発"
+    },
     achievements: {
       ko: ["NestJS 기반 관리자 백엔드 구축"],
       en: ["Built admin backend using NestJS"],
@@ -378,10 +508,22 @@ export const fallbackProjects: LocalizedCareerProject[] = [
   },
   {
     id: 21,
-    title: { ko: "한국제약바이오협회 디지털역사관 개발", en: "KPBMA Digital Archive Development", ja: "韓国製薬バイオ協会 デジタル歴史館開発" },
-    company: { ko: "한국제약바이오협회", en: "Korea Pharmaceutical and Bio-Pharma Manufacturers Association", ja: "韓国製薬バイオ協会" },
+    title: {
+      ko: "한국제약바이오협회 디지털역사관 개발",
+      en: "KPBMA Digital Archive Development",
+      ja: "韓国製薬バイオ協会 デジタル歴史館開発"
+    },
+    company: {
+      ko: "한국제약바이오협회",
+      en: "Korea Pharmaceutical and Bio-Pharma Manufacturers Association",
+      ja: "韓国製薬バイオ協会"
+    },
     period: { ko: "2025.07 ~ 2025.10", en: "2025.07 - 2025.10", ja: "2025.07 - 2025.10" },
-    role: { ko: "홈페이지 및 디지털 아카이브 개발", en: "Developed website and digital archive", ja: "Webサイトとデジタルアーカイブを開発" },
+    role: {
+      ko: "홈페이지 및 디지털 아카이브 개발",
+      en: "Developed website and digital archive",
+      ja: "Webサイトとデジタルアーカイブを開発"
+    },
     achievements: {
       ko: ["NodeJS 기반 상세 페이지 자동 생성으로 동적 아카이브 관리 구현"],
       en: ["Implemented dynamic archive management by auto-generating detail pages with Node.js"],
@@ -391,7 +533,11 @@ export const fallbackProjects: LocalizedCareerProject[] = [
   },
   {
     id: 22,
-    title: { ko: "무주 헬스케어 관리자 웹 프론트 개발", en: "Muju Healthcare Admin Frontend Development", ja: "無住ヘルスケア 管理者フロント開発" },
+    title: {
+      ko: "무주 헬스케어 관리자 웹 프론트 개발",
+      en: "Muju Healthcare Admin Frontend Development",
+      ja: "無住ヘルスケア 管理者フロント開発"
+    },
     company: { ko: "브이투씨(주)", en: "V2C Co., Ltd.", ja: "V2C株式会社" },
     period: { ko: "2025.11", en: "2025.11", ja: "2025.11" },
     role: { ko: "관리자 웹 프론트 개발", en: "Developed admin web frontend", ja: "管理者Webフロントを開発" },
@@ -407,21 +553,18 @@ export const fallbackProjects: LocalizedCareerProject[] = [
 export const fallbackCareerProjectCount = fallbackProjects.length;
 
 export async function getCareerProjects(locale: Locale): Promise<CareerProject[]> {
-  const { getCareerProjectsFromDb } = await import("./project-repository");
-  try {
-    return await getCareerProjectsFromDb(locale);
-  } catch (error) {
-    console.error("Failed to load projects from DB:", error);
-    return [];
-  }
+  return fallbackProjects.map((project) => ({
+    id: String(project.id),
+    title: project.title[locale],
+    company: project.company?.[locale],
+    period: project.period[locale],
+    role: project.role[locale],
+    achievements: project.achievements[locale],
+    stack: project.stack,
+    links: project.links
+  }));
 }
 
 export async function getCareerProjectCount(): Promise<number> {
-  const { getCareerProjectCountFromDb } = await import("./project-repository");
-  try {
-    return await getCareerProjectCountFromDb();
-  } catch (error) {
-    console.error("Failed to load project count from DB:", error);
-    return 0;
-  }
+  return fallbackCareerProjectCount;
 }

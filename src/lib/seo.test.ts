@@ -9,9 +9,9 @@ describe("seo", () => {
     });
 
     expect(metadata.title).toEqual({ absolute: "About Me | Seung-Ju Oh | Portfolio" });
-    expect(metadata.alternates?.canonical).toBe("https://seung-ju.com/en/about");
-    expect(metadata.alternates?.languages?.ko).toBe("https://seung-ju.com/about");
-    expect(metadata.alternates?.languages?.en).toBe("https://seung-ju.com/en/about");
+    expect(metadata.alternates?.canonical).toBe("https://portfolio.seung-ju.com/en/about/");
+    expect(metadata.alternates?.languages?.ko).toBe("https://portfolio.seung-ju.com/about/");
+    expect(metadata.alternates?.languages?.en).toBe("https://portfolio.seung-ju.com/en/about/");
     expect(metadata.openGraph?.siteName).toBe("Seung-Ju Oh | Portfolio");
   });
 
@@ -22,8 +22,8 @@ describe("seo", () => {
       path: "/"
     });
 
-    expect(metadata.alternates?.canonical).toBe("https://seung-ju.com/");
-    expect(metadata.alternates?.languages?.["x-default"]).toBe("https://seung-ju.com/");
+    expect(metadata.alternates?.canonical).toBe("https://portfolio.seung-ju.com/");
+    expect(metadata.alternates?.languages?.["x-default"]).toBe("https://portfolio.seung-ju.com/");
   });
 
   it("builds japanese localized metadata copy", () => {
@@ -36,6 +36,6 @@ describe("seo", () => {
     expect(metadata.title).toEqual({ absolute: "ポートフォリオ | オ・スンジュ | ポートフォリオ" });
     expect(metadata.description).toContain("実務プロジェクト");
     expect(metadata.openGraph?.locale).toBe("ja_JP");
-    expect(metadata.alternates?.canonical).toBe("https://seung-ju.com/ja/portfolio");
+    expect(metadata.alternates?.canonical).toBe("https://portfolio.seung-ju.com/ja/portfolio/");
   });
 });

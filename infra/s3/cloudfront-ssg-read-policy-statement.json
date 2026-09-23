@@ -1,0 +1,8 @@
+{
+  "Sid": "AllowCloudFrontDistributionReadSsg",
+  "Effect": "Allow",
+  "Principal": { "Service": "cloudfront.amazonaws.com" },
+  "Action": "s3:GetObject",
+  "Resource": "arn:aws:s3:::portfolio-2020.seung-ju.com/ssg/*",
+  "Condition": { "StringEquals": { "AWS:SourceArn": "arn:aws:cloudfront::<ACCOUNT_ID>:distribution/EL15WJYWXRAIG" } }
+}

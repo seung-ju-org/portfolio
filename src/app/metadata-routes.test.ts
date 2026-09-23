@@ -18,8 +18,8 @@ describe("metadata routes", () => {
   it("returns sitemap entries for routes and locales", () => {
     const data = sitemap();
     expect(data.length).toBe(12);
-    expect(data.some((item) => item.url.endsWith("/portfolio"))).toBe(true);
-    expect(data.some((item) => item.url.endsWith("/en/contact"))).toBe(true);
-    expect(data.some((item) => item.url.endsWith("/ja/about"))).toBe(true);
+    expect(data.some((item) => item.url.endsWith("/portfolio/"))).toBe(true);
+    expect(data.some((item) => item.url.endsWith("/en/contact/"))).toBe(true);
+    expect(data.some((item) => item.url.endsWith("/ja/about/"))).toBe(true);
   });
 });

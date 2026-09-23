@@ -3,7 +3,7 @@ name: Failure Handler
 on:
   workflow_run:
     workflows:
-      - CI/CD
+      - Static site
     types:
       - completed
 
