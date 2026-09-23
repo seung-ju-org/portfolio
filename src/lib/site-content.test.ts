@@ -85,7 +85,11 @@ describe("site content", () => {
       return match ? Number(match[1]) * 100 + Number(match[2] ?? 0) : 0;
     });
     expect(starts).toEqual([...starts].sort((left, right) => right - left));
-    expect(getSiteContent("en").projects.find((project) => project.id === "brassone")?.period).toBe("2026.03–Present");
+    for (const locale of ["ko", "en", "ja"] as const) {
+      expect(getSiteContent(locale).projects.find((project) => project.id === "brassone")?.period).toBe(
+        "2026.03–2026.06"
+      );
+    }
     expect(getSiteContent("ja").projects.find((project) => project.id === "unicorea-payment")?.period).toBe(
       "2026.04–現在"
     );
