@@ -352,12 +352,14 @@ export function getSiteContent(locale: Locale): SiteContent {
       src: "/images/projects/services/bankmall-archived-portfolio.webp",
       width: 1200,
       height: 676,
+      // Alt describes the screen, same as the caption. Where the file came from is in provenance;
+      // leaving it here would read the sourcing note aloud to screen reader users only.
       alt:
         locale === "ko"
-          ? "이전 포트폴리오의 뱅크몰 대출 비교 웹 화면"
+          ? "데스크톱 모니터에 띄운 뱅크몰 대출 비교 웹 화면"
           : locale === "en"
-            ? "Bankmall web experience on a desktop monitor from an earlier portfolio"
-            : "以前のポートフォリオに掲載されたBankmallローン比較Web画面",
+            ? "Bankmall loan comparison web screen on a desktop monitor"
+            : "デスクトップモニターに表示されたBankmallローン比較Web画面",
       caption:
         locale === "ko"
           ? "뱅크몰 대출 비교 웹 화면"
@@ -372,11 +374,11 @@ export function getSiteContent(locale: Locale): SiteContent {
   const serviceImages = {
     "3": [
       "/images/projects/services/skku-imba-archived-portfolio.webp",
-      "SKKU IMBA website displayed on a desktop monitor, from an earlier portfolio."
+      "SKKU IMBA website displayed on a desktop monitor."
     ],
     "7": [
       "/images/projects/services/homegrit-archived-portfolio.webp",
-      "Two HomeGrit mobile app screens, from an earlier portfolio."
+      "Two HomeGrit mobile app screens side by side."
     ],
     "19": [
       "/images/projects/services/ensolution-dashboard.webp",
@@ -393,16 +395,16 @@ export function getSiteContent(locale: Locale): SiteContent {
       alt:
         locale === "ko"
           ? project.id === "3"
-            ? "이전 포트폴리오의 SKKU IMBA 웹사이트 화면"
+            ? "데스크톱 모니터에 띄운 SKKU IMBA 웹사이트 화면"
             : project.id === "7"
-              ? "이전 포트폴리오의 HomeGrit 모바일 앱 화면"
-              : "ENSolution 공개 대시보드 이미지"
+              ? "나란히 놓인 HomeGrit 모바일 앱 화면 두 개"
+              : "ENSolution 대시보드 화면"
           : locale === "ja"
             ? project.id === "3"
-              ? "以前のポートフォリオに掲載されたSKKU IMBA Webサイト画面"
+              ? "デスクトップモニターに表示されたSKKU IMBA Webサイト画面"
               : project.id === "7"
-                ? "以前のポートフォリオに掲載されたHomeGritモバイルアプリ画面"
-                : "ENSolution公開ダッシュボード画像"
+                ? "並べて表示されたHomeGritモバイルアプリ画面2つ"
+                : "ENSolutionダッシュボード画面"
             : image[1],
       caption: imageCaptions[project.id as keyof typeof imageCaptions][locale],
       provenance:
