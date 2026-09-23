@@ -13,7 +13,7 @@ describe("site controls", () => {
     expect(localePath("ja", "/en/portfolio/")).toBe("/ja/portfolio/");
     expect(localePath("ko", "/ja/contact/")).toBe("/contact/");
   });
-  it("filters projects using accessible pressed state", () => {
+  it("combines company and accessible category filters, and resets categories with Escape", () => {
     render(
       <ProjectFilter
         locale="en"
@@ -25,7 +25,8 @@ describe("site controls", () => {
             period: "2025",
             role: "Engineer",
             achievements: ["Done"],
-            stack: "TS"
+            stack: "TS",
+            category: "design"
           },
           {
             id: "two",
@@ -34,7 +35,8 @@ describe("site controls", () => {
             period: "2024",
             role: "Engineer",
             achievements: ["Done"],
-            stack: "TS"
+            stack: "TS",
+            category: "archive"
           }
         ]}
       />
@@ -42,7 +44,71 @@ describe("site controls", () => {
     fireEvent.change(screen.getByLabelText("Filter work by company"), { target: { value: "A" } });
     expect(screen.getByText("One")).toBeInTheDocument();
     expect(screen.queryByText("Two")).not.toBeInTheDocument();
+    const design = screen.getByRole("button", { name: "Design" });
+    fireEvent.click(design);
+    expect(design).toHaveAttribute("aria-pressed", "true");
+    fireEvent.keyDown(screen.getByRole("group", { name: "Work category" }), { key: "Escape" });
+    expect(screen.getByRole("button", { name: "All work" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("Two")).toBeInTheDocument();
     expect(document.querySelector(".project-grid")?.hasAttribute("data-filter-transition")).toBe(true);
+  });
+  it("uses image semantics and keeps no-image cards editorial", () => {
+    const { container, rerender } = render(
+      <ProjectCard
+        locale="en"
+        project={{
+          id: "image",
+          title: "Image work",
+          period: "2026",
+          role: "Engineer",
+          achievements: [],
+          stack: "TS",
+          image: {
+            src: "/projects/image.webp",
+            width: 1600,
+            height: 900,
+            alt: "Accessible project preview",
+            caption: "Project interface",
+            provenance: "Project archive",
+            sourceUrl: "https://example.com/archive"
+          }
+        }}
+      />
+    );
+    const image = screen.getByRole("img", { name: "Accessible project preview" });
+    expect(image).toHaveAttribute("loading", "lazy");
+    expect(image).toHaveAttribute("decoding", "async");
+    expect(image).toHaveAttribute("width", "1600");
+    expect(screen.getByRole("link", { name: "Image work View full-size image" })).toHaveAttribute(
+      "href",
+      "/projects/image.webp"
+    );
+    expect(screen.getByRole("link", { name: "Project archive ↗" })).toHaveAttribute(
+      "href",
+      "https://example.com/archive"
+    );
+    rerender(
+      <ProjectCard
+        locale="en"
+        project={{ id: "none", title: "No image", period: "2026", role: "Engineer", achievements: [], stack: "TS" }}
+      />
+    );
+    expect(container.querySelector("img")).toBeNull();
+    expect(container.querySelector("figure")).toBeNull();
+    expect(screen.getByText("No image")).toBeInTheDocument();
+  });
+  it("uses a localized other bucket without inventing an affiliation", () => {
+    render(
+      <ProjectFilter
+        locale="en"
+        projects={[
+          { id: "mkwp", title: "mKWP", period: "2023", role: "Engineer", achievements: [], stack: "React Native" }
+        ]}
+      />
+    );
+    expect(screen.getByRole("option", { name: "Other" })).toHaveValue("__other__");
+    expect(screen.queryByText(/Independent/)).not.toBeInTheDocument();
+    expect(screen.getByText("2023")).toBeInTheDocument();
   });
   it("closes the menu with Escape and returns focus to its control", () => {
     render(<Header locale="en" page="home" />);
@@ -160,21 +226,33 @@ describe("site controls", () => {
       callbacks.push(callback);
       return callbacks.length;
     });
-    const { container, rerender } = render(
-      <ProjectCard project={{ id: "x", title: "X", period: "2026", role: "Engineer", achievements: [], stack: "TS" }} />
-    );
+    const project = {
+      id: "x",
+      title: "X",
+      period: "2026",
+      role: "Engineer",
+      achievements: [],
+      stack: "TS",
+      image: {
+        src: "/projects/x.webp",
+        width: 1600,
+        height: 1000,
+        alt: "X",
+        caption: "X",
+        provenance: "Public service"
+      }
+    };
+    const { container, rerender } = render(<ProjectCard project={project} />);
     const card = container.querySelector("article")!;
     fireEvent.pointerMove(card, { clientX: 200, clientY: 200 });
-    expect(container.querySelector(".project-cover")?.getAttribute("style")).toBeNull();
+    expect(container.querySelector(".project-media")?.getAttribute("style")).toBeNull();
     fine = true;
-    rerender(
-      <ProjectCard project={{ id: "x", title: "X", period: "2026", role: "Engineer", achievements: [], stack: "TS" }} />
-    );
+    rerender(<ProjectCard project={project} />);
     fireEvent.pointerMove(card, { clientX: 999, clientY: 999 });
     callbacks.forEach((callback) => callback(0));
-    expect(container.querySelector(".project-cover")?.style.getPropertyValue("--cover-x")).toBe("1");
+    expect(container.querySelector(".project-media")?.style.getPropertyValue("--cover-x")).toBe("1");
     fireEvent.pointerLeave(card);
-    expect(container.querySelector(".project-cover")?.style.getPropertyValue("--cover-x")).toBe("");
+    expect(container.querySelector(".project-media")?.style.getPropertyValue("--cover-x")).toBe("");
     request.mockRestore();
   });
 });

@@ -367,12 +367,16 @@ select:focus-visible {
   align-items: center;
   gap: 12px;
   margin-bottom: 24px;
+  min-width: 0;
 }
 .filters label {
+  flex: 0 1 auto;
   font-size: 0.72rem;
   color: var(--muted);
 }
 .filters select {
+  flex: 1 1 10rem;
+  min-width: 0;
   min-height: 42px;
   max-width: 100%;
   border: 1px solid var(--line);
@@ -381,6 +385,26 @@ select:focus-visible {
   padding: 0 28px 0 12px;
   font: inherit;
   font-size: 0.8rem;
+}
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: -8px 0 24px;
+}
+.category-filters button {
+  min-height: 34px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  padding: 0 10px;
+  font: inherit;
+  font-size: 0.72rem;
+}
+.category-filters button[aria-pressed="true"] {
+  border-color: #c9c4ba;
+  background: #c9c4ba;
+  color: #1f1f1d;
 }
 .project-grid {
   display: grid;
@@ -399,30 +423,45 @@ select:focus-visible {
   flex-direction: column;
   align-items: flex-start;
 }
-.project-cover {
-  position: absolute;
-  inset: 0 0 auto;
-  height: 105px;
-  opacity: 0.7;
-  background:
-    radial-gradient(circle at var(--light-x, 72%) var(--light-y, 20%), #d4d0c5 0 3%, transparent 3.4%),
-    linear-gradient(135deg, #34332f, #20201e 58%, #6b685f);
+.project-media {
+  width: calc(100% + 48px);
+  margin: -24px -24px 16px;
 }
-.project-brassone .project-cover {
-  background: linear-gradient(120deg, #82796d, #242422 45%, #c7bdb0);
+.project-media-viewport {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #292927;
 }
-.project-19 .project-cover {
-  background: radial-gradient(circle at 35% 58%, #d5d0c6 0 8%, transparent 8.5%), #32312e;
+.project-media > a {
+  display: block;
 }
-.project-1 .project-cover {
-  background: linear-gradient(110deg, #242422 15%, #9b9286 16% 19%, #282725 20%);
+.project-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #292927;
 }
-.project > *:not(.project-cover) {
+.project-media figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  background: #1e1e1c;
+  color: #e7e2d9;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+.project-media figcaption a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.project > *:not(.project-media) {
   position: relative;
   z-index: 1;
 }
 .project > p {
-  margin-top: 94px;
+  margin: 0;
 }
 .project h3 {
   margin: 7px 0;
@@ -451,6 +490,14 @@ select:focus-visible {
   font-size: 0.76rem;
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+.project-empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 34px 24px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 0.86rem;
 }
 .contact {
   text-align: center;
@@ -823,7 +870,7 @@ footer {
   .button[data-magnetic]:focus-visible {
     transform: translate(var(--magnetic-x, 0px), var(--magnetic-y, 0px));
   }
-  .project-cover {
+  .project-media {
     transform: translate(calc(var(--cover-x, 0) * 4px), calc(var(--cover-y, 0) * 4px))
       rotate(calc(var(--cover-x, 0) * 3deg));
     transition:
@@ -833,7 +880,7 @@ footer {
       var(--light-x, 72%) var(--light-y, 20%),
       center;
   }
-  .project:hover .project-cover {
+  .project:hover .project-media img {
     filter: brightness(1.1);
   }
 }

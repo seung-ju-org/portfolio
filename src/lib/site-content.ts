@@ -35,10 +35,14 @@ export type SiteContent = {
     achievements: string[];
     stack: string;
     links?: { label: string; url: string }[];
+    category?: ProjectCategory;
+    image?: ProjectImage;
   }[];
 };
 
 import { fallbackProjects } from "./projects";
+import { additionalProjects } from "./additional-projects";
+import { evidenceProjects, type ProjectCategory, type ProjectImage } from "./project-evidence";
 
 type Localized<T> = Record<Locale, T>;
 const localized = <T>(ko: T, en: T, ja: T): Localized<T> => ({ ko, en, ja });
@@ -256,7 +260,7 @@ function translate(locale: Exclude<Locale, "ko">): Omit<SiteContent, "profile" |
 
 export function getSiteContent(locale: Locale): SiteContent {
   const localizedContent = locale === "ko" ? content.ko : { ...translate(locale), about: content[locale].about };
-  const projects = fallbackProjects.map((project) => ({
+  const projects: SiteContent["projects"] = fallbackProjects.map((project) => ({
     id: String(project.id),
     title: project.title[locale],
     company: project.company?.[locale],
@@ -273,6 +277,113 @@ export function getSiteContent(locale: Locale): SiteContent {
     stack: project.stack,
     links: project.links
   }));
+  const bankmallApp = projects.find((project) => project.id === "1");
+  const bankmallWebIndex = projects.findIndex((project) => project.id === "8");
+  if (bankmallApp && bankmallWebIndex >= 0) {
+    const bankmallWeb = projects[bankmallWebIndex];
+    bankmallApp.title =
+      locale === "ko"
+        ? "뱅크몰 웹·앱 개발"
+        : locale === "en"
+          ? "Bankmall Web & App Development"
+          : "Bankmall Web・アプリ開発";
+    bankmallApp.period = "2021.09–2022.03 / 2022.11–2023.03";
+    bankmallApp.role =
+      locale === "ko"
+        ? "웹 프론트엔드·CMS 및 모바일 앱 개발"
+        : locale === "en"
+          ? "Web frontend/CMS and mobile app development"
+          : "Webフロントエンド・CMSとモバイルアプリ開発";
+    bankmallApp.achievements = [...bankmallWeb.achievements, ...bankmallApp.achievements];
+    bankmallApp.stack = "Next.js, React, React Native, GitLab CI";
+    bankmallApp.image = {
+      src: "/images/projects/services/bankmall-archived-portfolio.webp",
+      width: 1200,
+      height: 676,
+      alt:
+        locale === "ko"
+          ? "이전 포트폴리오의 뱅크몰 대출 비교 웹 화면"
+          : locale === "en"
+            ? "Bankmall web experience on a desktop monitor from an earlier portfolio"
+            : "以前のポートフォリオに掲載されたBankmallローン比較Web画面",
+      caption:
+        locale === "ko"
+          ? "이전 포트폴리오 수록 화면"
+          : locale === "en"
+            ? "Archived portfolio screen"
+            : "以前のポートフォリオ掲載画面",
+      provenance:
+        locale === "ko"
+          ? "이전 포트폴리오 PDF"
+          : locale === "en"
+            ? "Archived portfolio PDF"
+            : "以前のポートフォリオPDF",
+      fit: "contain"
+    };
+    projects.splice(bankmallWebIndex, 1);
+  }
+  const serviceImages = {
+    "3": [
+      "/images/projects/services/skku-imba-archived-portfolio.webp",
+      "SKKU IMBA website displayed on a desktop monitor, from an earlier portfolio."
+    ],
+    "7": [
+      "/images/projects/services/homegrit-archived-portfolio.webp",
+      "Two HomeGrit mobile app screens, from an earlier portfolio."
+    ],
+    "19": [
+      "/images/projects/services/ensolution-dashboard.webp",
+      "Current public promotional dashboard image for ENSolution."
+    ]
+  } as const;
+  for (const project of projects) {
+    const image = serviceImages[project.id as keyof typeof serviceImages];
+    if (!image) continue;
+    project.image = {
+      src: image[0],
+      width: 1200,
+      height: project.id === "19" ? 1077 : 676,
+      alt:
+        locale === "ko"
+          ? project.id === "3"
+            ? "이전 포트폴리오의 SKKU IMBA 웹사이트 화면"
+            : project.id === "7"
+              ? "이전 포트폴리오의 HomeGrit 모바일 앱 화면"
+              : "ENSolution 공개 대시보드 이미지"
+          : locale === "ja"
+            ? project.id === "3"
+              ? "以前のポートフォリオに掲載されたSKKU IMBA Webサイト画面"
+              : project.id === "7"
+                ? "以前のポートフォリオに掲載されたHomeGritモバイルアプリ画面"
+                : "ENSolution公開ダッシュボード画像"
+            : image[1],
+      caption:
+        locale === "ko"
+          ? project.id === "19"
+            ? "2026년 확인한 공개 서비스 이미지"
+            : "이전 포트폴리오 수록 화면"
+          : locale === "ja"
+            ? project.id === "19"
+              ? "2026年に確認した公開サービス画像"
+              : "以前のポートフォリオ掲載画面"
+            : project.id === "19"
+              ? "Current public service image, viewed 2026-09-23"
+              : "Archived portfolio screen",
+      provenance:
+        locale === "ko"
+          ? project.id === "19"
+            ? "ENSolution 공개 사이트"
+            : "이전 포트폴리오 PDF"
+          : locale === "ja"
+            ? project.id === "19"
+              ? "ENSolution公開サイト"
+              : "以前のポートフォリオPDF"
+            : project.id === "19"
+              ? "ENSolution public site"
+              : "Archived portfolio PDF",
+      fit: "contain"
+    };
+  }
   projects.push({
     id: "brassone",
     title:
@@ -282,7 +393,7 @@ export function getSiteContent(locale: Locale): SiteContent {
           ? "Daechang Brassone Web Development"
           : "大昌ブラスワンWeb開発",
     company: "크림쿠키스튜디오",
-    period: "2026.03–현재",
+    period: locale === "ko" ? "2026.03–현재" : locale === "ja" ? "2026.03–現在" : "2026.03–Present",
     role: locale === "ko" ? "웹 개발" : locale === "en" ? "Web development" : "Web開発",
     achievements: [
       locale === "ko"
@@ -303,7 +414,7 @@ export function getSiteContent(locale: Locale): SiteContent {
           ? "Payment and Settlement Service Development"
           : "決済・精算サービス開発",
     company: locale === "ko" ? "유니코아" : "Unicorea",
-    period: "2026.04–현재",
+    period: locale === "ko" ? "2026.04–현재" : locale === "ja" ? "2026.04–現在" : "2026.04–Present",
     role: locale === "ko" ? "Full-Stack Engineer" : "Full-Stack Engineer",
     achievements: [
       locale === "ko"
@@ -315,5 +426,14 @@ export function getSiteContent(locale: Locale): SiteContent {
     stack: "React, TypeScript, Kotlin, Spring Boot, Kubernetes",
     links: undefined
   });
-  return { profile: profile[locale], ...localizedContent, projects };
+  projects.push(...evidenceProjects[locale], ...additionalProjects[locale]);
+  const startDate = (period: string) => {
+    const match = period.match(/(\d{4})(?:\.(\d{2}))?/);
+    return match ? Number(match[1]) * 100 + Number(match[2] ?? 0) : 0;
+  };
+  const orderedProjects = projects
+    .map((project, index) => ({ project, index }))
+    .sort((left, right) => startDate(right.project.period) - startDate(left.project.period) || left.index - right.index)
+    .map(({ project }) => project);
+  return { profile: profile[locale], ...localizedContent, projects: orderedProjects };
 }

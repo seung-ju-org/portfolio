@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { Locale, PageKind, SiteContent } from "@/lib/site-content";
+import type { ProjectCategory } from "@/lib/project-evidence";
 import { localePath, pagePath } from "./paths";
 
 const pageNames: Record<PageKind, Record<Locale, string>> = {
@@ -80,9 +82,23 @@ export function Header({ locale, page }: { locale: Locale; page: PageKind }) {
 }
 
 type Project = SiteContent["projects"][number];
-export function ProjectCard({ project, full = false }: { project: Project; full?: boolean }) {
+const fullImageLabel: Record<Locale, string> = {
+  ko: "이미지 크게 보기",
+  en: "View full-size image",
+  ja: "画像を拡大表示"
+};
+
+export function ProjectCard({
+  project,
+  full = false,
+  locale = "ko"
+}: {
+  project: Project;
+  full?: boolean;
+  locale?: Locale;
+}) {
   const card = useRef<HTMLElement>(null);
-  const cover = useRef<HTMLDivElement>(null);
+  const cover = useRef<HTMLElement>(null);
   const point = useRef({ x: 0, y: 0 });
   const frame = useRef(0);
   const fine = useRef<MediaQueryList | null>(null);
@@ -130,10 +146,46 @@ export function ProjectCard({ project, full = false }: { project: Project; full?
   };
   return (
     <article className={`project project-${project.id}`} onPointerLeave={reset} onPointerMove={pointer} ref={card}>
-      <div aria-hidden="true" className="project-cover" ref={cover} />
-      <p>
-        {project.company || "Independent"} · {project.period}
-      </p>
+      {project.image ? (
+        <figure
+          className="project-media"
+          ref={(element) => {
+            cover.current = element;
+          }}
+        >
+          <a
+            aria-label={`${project.title} ${fullImageLabel[locale]}`}
+            href={project.image.src}
+            rel="noreferrer"
+            target="_blank"
+          >
+            <div className="project-media-viewport">
+              <Image
+                alt={project.image.alt}
+                decoding="async"
+                height={project.image.height}
+                loading="lazy"
+                sizes="(max-width: 700px) 100vw, 50vw"
+                src={project.image.src}
+                style={{ objectFit: project.image.fit ?? "cover" }}
+                unoptimized
+                width={project.image.width}
+              />
+            </div>
+          </a>
+          <figcaption>
+            <span>{project.image.caption}</span>
+            {project.image.sourceUrl ? (
+              <a href={project.image.sourceUrl} rel="noreferrer" target="_blank">
+                {project.image.provenance} ↗
+              </a>
+            ) : (
+              <span>{project.image.provenance}</span>
+            )}
+          </figcaption>
+        </figure>
+      ) : null}
+      <p>{project.company ? `${project.company} · ${project.period}` : project.period}</p>
       <h3>{project.title}</h3>
       <strong>{project.role}</strong>
       <ul>
@@ -150,33 +202,95 @@ export function ProjectCard({ project, full = false }: { project: Project; full?
     </article>
   );
 }
-const filterLabels: Record<Locale, { all: string; label: string }> = {
-  ko: { all: "전체 작업", label: "회사별 작업 필터" },
-  en: { all: "All work", label: "Filter work by company" },
-  ja: { all: "すべての作品", label: "会社で作品を絞り込む" }
+const filterLabels: Record<
+  Locale,
+  {
+    all: string;
+    other: string;
+    label: string;
+    category: string;
+    empty: string;
+    categories: Record<ProjectCategory, string>;
+  }
+> = {
+  ko: {
+    all: "전체 작업",
+    other: "기타",
+    label: "회사별 작업 필터",
+    category: "작업 분류",
+    empty: "선택한 조건에 맞는 작업이 없습니다.",
+    categories: { work: "개발", design: "디자인", archive: "아카이브", opensource: "오픈 소스" }
+  },
+  en: {
+    all: "All work",
+    other: "Other",
+    label: "Filter work by company",
+    category: "Work category",
+    empty: "No work matches these filters.",
+    categories: { work: "Development", design: "Design", archive: "Archive", opensource: "Open source" }
+  },
+  ja: {
+    all: "すべての作品",
+    other: "その他",
+    label: "会社で作品を絞り込む",
+    category: "作品カテゴリ",
+    empty: "選択した条件に一致する作品はありません。",
+    categories: { work: "開発", design: "デザイン", archive: "アーカイブ", opensource: "オープンソース" }
+  }
 };
+const otherCompany = "__other__";
 export function ProjectFilter({ projects, locale }: { projects: Project[]; locale: Locale }) {
   const [filter, setFilter] = useState("all");
-  const tags = ["all", ...Array.from(new Set(projects.map((project) => project.company || "Independent")))];
+  const [category, setCategory] = useState<"all" | ProjectCategory>("all");
   const labels = filterLabels[locale];
-  const visible =
-    filter === "all" ? projects : projects.filter((project) => (project.company || "Independent") === filter);
+  const tags = ["all", ...Array.from(new Set(projects.map((project) => project.company ?? otherCompany)))];
+  const categories = Array.from(new Set(projects.map((project) => project.category ?? "work"))) as ProjectCategory[];
+  const visible = projects.filter(
+    (project) =>
+      (filter === "all" || (project.company ?? otherCompany) === filter) &&
+      (category === "all" || (project.category ?? "work") === category)
+  );
+  const resetFilters = () => {
+    setFilter("all");
+    setCategory("all");
+  };
   return (
     <>
       <div className="filters">
         <label htmlFor="project-filter">{labels.label}</label>
-        <select id="project-filter" onChange={(event) => setFilter(event.target.value)} value={filter}>
+        <select
+          id="project-filter"
+          onChange={(event) => setFilter(event.target.value)}
+          onKeyDown={(event) => event.key === "Escape" && resetFilters()}
+          value={filter}
+        >
           {tags.map((tag) => (
             <option key={tag} value={tag}>
-              {tag === "all" ? labels.all : tag}
+              {tag === "all" ? labels.all : tag === otherCompany ? labels.other : tag}
             </option>
           ))}
         </select>
       </div>
-      <div className="project-grid" data-filter-transition key={filter}>
-        {visible.map((project) => (
-          <ProjectCard full key={project.id} project={project} />
+      <div
+        aria-label={labels.category}
+        className="category-filters"
+        onKeyDown={(event) => event.key === "Escape" && resetFilters()}
+        role="group"
+      >
+        {(["all", ...categories] as const).map((value) => (
+          <button aria-pressed={category === value} key={value} onClick={() => setCategory(value)} type="button">
+            {value === "all" ? labels.all : labels.categories[value]}
+          </button>
         ))}
+      </div>
+      <div className="project-grid" data-filter-transition key={`${filter}-${category}`}>
+        {visible.length ? (
+          visible.map((project) => <ProjectCard full key={project.id} locale={locale} project={project} />)
+        ) : (
+          <p className="project-empty" role="status">
+            {labels.empty}
+          </p>
+        )}
       </div>
     </>
   );

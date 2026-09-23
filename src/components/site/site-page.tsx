@@ -208,7 +208,7 @@ export function SitePage({ locale, page, content }: { locale: Locale; page: Page
                     return project ? [project] : [];
                   })
                   .map((project) => (
-                    <ProjectCard key={project.id} project={project} />
+                    <ProjectCard key={project.id} locale={locale} project={project} />
                   ))}
               </div>
             )}
