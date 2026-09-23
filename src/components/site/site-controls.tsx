@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Locale, PageKind, SiteContent } from "@/lib/site-content";
 import { localePath, pagePath } from "./paths";
 
@@ -19,21 +19,39 @@ export { localePath, pagePath } from "./paths";
 export function Header({ locale, page }: { locale: Locale; page: PageKind }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const button = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    // Route changes must collapse the mobile disclosure before its next link can receive focus.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setOpen(false);
+  }, [locale, pathname]);
+  useEffect(() => {
+    const close = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && open) {
+        setOpen(false);
+        button.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, [open]);
   return (
     <header className="site-header">
       <Link className="wordmark" href={pagePath(locale, "home")}>
         SEUNG JU <i>OH</i>
       </Link>
       <button
+        aria-controls="site-navigation"
         aria-expanded={open}
         aria-label="Toggle navigation"
         className="menu-button"
         onClick={() => setOpen(!open)}
+        ref={button}
         type="button"
       >
-        MENU
+        <span className="menu-icon" aria-hidden="true" /> <span className="menu-label">MENU</span>
       </button>
-      <nav className={open ? "open" : ""}>
+      <nav className={open ? "open" : ""} id="site-navigation">
         {(Object.keys(pageNames) as PageKind[]).map((key) => (
           <Link
             aria-current={page === key ? "page" : undefined}
@@ -63,9 +81,56 @@ export function Header({ locale, page }: { locale: Locale; page: PageKind }) {
 
 type Project = SiteContent["projects"][number];
 export function ProjectCard({ project, full = false }: { project: Project; full?: boolean }) {
+  const card = useRef<HTMLElement>(null);
+  const cover = useRef<HTMLDivElement>(null);
+  const point = useRef({ x: 0, y: 0 });
+  const frame = useRef(0);
+  const fine = useRef<MediaQueryList | null>(null);
+  const reduced = useRef<MediaQueryList | null>(null);
+  const resetVars = () => {
+    cancelAnimationFrame(frame.current);
+    frame.current = 0;
+    cover.current?.style.removeProperty("--cover-x");
+    cover.current?.style.removeProperty("--cover-y");
+    cover.current?.style.removeProperty("--light-x");
+    cover.current?.style.removeProperty("--light-y");
+  };
+  useEffect(() => {
+    if (!window.matchMedia) return;
+    fine.current = window.matchMedia("(hover: hover) and (pointer: fine)");
+    reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const change = () => resetVars();
+    fine.current.addEventListener("change", change);
+    reduced.current.addEventListener("change", change);
+    return () => {
+      fine.current?.removeEventListener("change", change);
+      reduced.current?.removeEventListener("change", change);
+      resetVars();
+    };
+  }, []);
+  const pointer = (event: React.PointerEvent<HTMLElement>) => {
+    if (reduced.current?.matches || !fine.current?.matches) return;
+    point.current = { x: event.clientX, y: event.clientY };
+    if (frame.current) return;
+    frame.current = requestAnimationFrame(() => {
+      frame.current = 0;
+      const box = card.current?.getBoundingClientRect();
+      if (!box) return;
+      if (!box || !cover.current) return;
+      const x = Math.max(-1, Math.min(1, ((point.current.x - box.left) / box.width) * 2 - 1));
+      const y = Math.max(-1, Math.min(1, ((point.current.y - box.top) / box.height) * 2 - 1));
+      cover.current.style.setProperty("--cover-x", String(x));
+      cover.current.style.setProperty("--cover-y", String(y));
+      cover.current.style.setProperty("--light-x", `${(x + 1) * 50}%`);
+      cover.current.style.setProperty("--light-y", `${(y + 1) * 50}%`);
+    });
+  };
+  const reset = () => {
+    resetVars();
+  };
   return (
-    <article className={`project project-${project.id}`}>
-      <div aria-hidden="true" className="project-cover" />
+    <article className={`project project-${project.id}`} onPointerLeave={reset} onPointerMove={pointer} ref={card}>
+      <div aria-hidden="true" className="project-cover" ref={cover} />
       <p>
         {project.company || "Independent"} · {project.period}
       </p>
@@ -108,7 +173,7 @@ export function ProjectFilter({ projects, locale }: { projects: Project[]; local
           ))}
         </select>
       </div>
-      <div className="project-grid">
+      <div className="project-grid" data-filter-transition key={filter}>
         {visible.map((project) => (
           <ProjectCard full key={project.id} project={project} />
         ))}
@@ -118,6 +183,13 @@ export function ProjectFilter({ projects, locale }: { projects: Project[]; local
 }
 export function CopyEmail({ email, locale }: { email: string; locale: Locale }) {
   const [status, setStatus] = useState("");
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current);
+    },
+    []
+  );
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(email);
@@ -131,6 +203,8 @@ export function CopyEmail({ email, locale }: { email: string; locale: Locale }) 
     } catch {
       setStatus(email);
     }
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setStatus(""), 3000);
   };
   return (
     <div className="email-actions">
@@ -140,7 +214,7 @@ export function CopyEmail({ email, locale }: { email: string; locale: Locale }) 
       <button onClick={copy} type="button">
         {locale === "ko" ? "주소 복사" : locale === "ja" ? "アドレスをコピー" : "Copy address"}
       </button>
-      <span aria-live="polite" className="sr-only">
+      <span aria-live="polite" className="copy-feedback" role="status">
         {status}
       </span>
     </div>

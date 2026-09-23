@@ -3,6 +3,7 @@ import type { Locale, PageKind, SiteContent } from "@/lib/site-content";
 import { HeroScene } from "./hero-scene";
 import { CopyEmail, Header, ProjectCard, ProjectFilter } from "./site-controls";
 import { pagePath } from "./paths";
+import { SiteMotion } from "./site-motion";
 
 const copy: Record<
   Locale,
@@ -52,6 +53,7 @@ export function SitePage({ locale, page, content }: { locale: Locale; page: Page
     <>
       <Header locale={locale} page={page} />
       <main className={`site-main page-${page}`}>
+        <SiteMotion />
         <div className="masthead">
           <span>
             {content.profile.name} / {content.profile.location}
@@ -68,9 +70,12 @@ export function SitePage({ locale, page, content }: { locale: Locale; page: Page
             <h1>
               {home ? (
                 <>
-                  SEUNG JU
-                  <br />
-                  OH
+                  <span className="title-line">
+                    <span>SEUNG JU</span>
+                  </span>
+                  <span className="title-line">
+                    <span>OH</span>
+                  </span>
                 </>
               ) : page === "about" ? (
                 text.profile
@@ -88,10 +93,10 @@ export function SitePage({ locale, page, content }: { locale: Locale; page: Page
             {home && <p className="current-summary">{content.profile.current}</p>}
             {home && (
               <div className="hero-actions">
-                <Link className="button button-primary" href={pagePath(locale, "portfolio")}>
+                <Link className="button button-primary" data-magnetic href={pagePath(locale, "portfolio")}>
                   {text.work} <span>↗</span>
                 </Link>
-                <Link className="button button-secondary" href={pagePath(locale, "about")}>
+                <Link className="button button-secondary" data-magnetic href={pagePath(locale, "about")}>
                   {text.profile}
                 </Link>
               </div>

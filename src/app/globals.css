@@ -9,6 +9,7 @@
 @tailwind components;
 @tailwind utilities;
 :root {
+  --motion-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --font-body: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
   --font-display: "Cormorant Local", var(--font-body);
   --paper: #1b1b1a;
@@ -404,7 +405,7 @@ select:focus-visible {
   height: 105px;
   opacity: 0.7;
   background:
-    radial-gradient(circle at 72% 20%, #d4d0c5 0 3%, transparent 3.4%),
+    radial-gradient(circle at var(--light-x, 72%) var(--light-y, 20%), #d4d0c5 0 3%, transparent 3.4%),
     linear-gradient(135deg, #34332f, #20201e 58%, #6b685f);
 }
 .project-brassone .project-cover {
@@ -514,10 +515,22 @@ footer {
     width: calc(100% - 24px);
   }
   .site-header nav {
-    display: none;
+    display: flex;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition:
+      opacity 0.2s var(--motion-ease),
+      transform 0.2s var(--motion-ease),
+      visibility 0s linear 0.2s;
   }
   .site-header nav.open {
-    display: flex;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    transition-delay: 0s;
     position: absolute;
     bottom: 55px;
     top: auto;
@@ -530,7 +543,15 @@ footer {
     background: #22221f;
   }
   .menu-button {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .menu-icon {
+    width: 13px;
+    height: 1px;
+    background: currentColor;
+    box-shadow: 0 4px currentColor;
   }
   .site-main,
   footer {
@@ -642,6 +663,15 @@ footer {
   font-family: var(--font-body);
   letter-spacing: -0.04em;
 }
+.title-line {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.15em;
+  margin-block: -0.15em;
+}
+.title-line > span {
+  display: block;
+}
 @media (min-width: 761px) {
   .hero-home {
     min-height: calc(100svh - 80px);
@@ -650,6 +680,181 @@ footer {
   }
   .hero-home .hero-art {
     margin-top: -92px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .site-main::before {
+    content: "";
+    position: fixed;
+    z-index: 40;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transform-origin: left;
+    transform: scaleX(var(--scroll-progress, 0));
+    pointer-events: none;
+    height: 1px;
+    background: var(--accent);
+    transition: transform 0.12s linear;
+  }
+  .hero-copy > :not(h1) {
+    animation: editorial-in 0.7s both;
+  }
+  .hero-copy .eyebrow {
+    animation-delay: 0.05s;
+  }
+  .hero-home h1 {
+    animation: none;
+  }
+  .title-line > span {
+    animation: title-in 0.75s var(--motion-ease) both;
+  }
+  .title-line:nth-child(2) > span {
+    animation-delay: 0.1s;
+  }
+  .hero-art {
+    animation: editorial-in 0.8s var(--motion-ease) both;
+  }
+  .hero-copy .lede {
+    animation-delay: 0.22s;
+  }
+  .hero-copy .current-summary {
+    animation-delay: 0.3s;
+  }
+  .hero-copy .hero-actions {
+    animation-delay: 0.38s;
+  }
+  .site-main [data-motion] {
+    transition:
+      opacity 0.55s var(--motion-ease),
+      transform 0.55s var(--motion-ease),
+      background-color 0.25s ease;
+  }
+  .site-main [data-motion="pending"] {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .site-main [data-motion="shown"] {
+    opacity: 1;
+    transform: none;
+  }
+  .capability-grid article:nth-child(2) {
+    transition-delay: 0.06s;
+  }
+  .capability-grid article:nth-child(3) {
+    transition-delay: 0.12s;
+  }
+  .capability-grid article:nth-child(4) {
+    transition-delay: 0.18s;
+  }
+  .button,
+  .social-links a,
+  .project,
+  .capability-grid article {
+    transition:
+      transform 0.25s ease,
+      background-color 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .button:hover,
+  .button:focus-visible {
+    transform: translateY(-2px);
+  }
+  .capability-grid article:hover {
+    background: #242421;
+  }
+  .button span {
+    transition: transform 0.25s ease;
+  }
+  .button:hover span {
+    transform: translate(3px, -3px);
+  }
+  .site-header nav > a,
+  .locale-links a,
+  .masthead a,
+  .social-links a {
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      text-decoration-color 0.2s ease;
+  }
+  .site-header nav > a:hover,
+  .site-header nav > a:focus-visible,
+  .locale-links a:hover,
+  .locale-links a:focus-visible {
+    color: var(--ink);
+    background: #393834;
+  }
+  .masthead a,
+  .social-links a {
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+  }
+  .masthead a:hover,
+  .masthead a:focus-visible,
+  .social-links a:hover,
+  .social-links a:focus-visible {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+  @keyframes editorial-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes title-in {
+    from {
+      transform: translateY(108%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  .button[data-magnetic],
+  .button[data-magnetic]:hover,
+  .button[data-magnetic]:focus-visible {
+    transform: translate(var(--magnetic-x, 0px), var(--magnetic-y, 0px));
+  }
+  .project-cover {
+    transform: translate(calc(var(--cover-x, 0) * 4px), calc(var(--cover-y, 0) * 4px))
+      rotate(calc(var(--cover-x, 0) * 3deg));
+    transition:
+      transform 0.35s var(--motion-ease),
+      filter 0.35s var(--motion-ease);
+    background-position:
+      var(--light-x, 72%) var(--light-y, 20%),
+      center;
+  }
+  .project:hover .project-cover {
+    filter: brightness(1.1);
+  }
+}
+.project-grid[data-filter-transition] {
+  animation: filter-in 0.35s var(--motion-ease) both;
+}
+.copy-feedback {
+  display: block;
+  min-height: 1.2em;
+  margin-top: 8px;
+  color: var(--accent);
+  font-size: 0.72rem;
+}
+@keyframes filter-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 /* Localized content must never inherit a serif fallback. */
