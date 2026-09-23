@@ -427,14 +427,27 @@ export function getSiteContent(locale: Locale): SiteContent {
     company: "크림쿠키스튜디오",
     period: locale === "ko" ? "2026.03–현재" : locale === "ja" ? "2026.03–現在" : "2026.03–Present",
     role: locale === "ko" ? "웹 개발" : locale === "en" ? "Web development" : "Web開発",
-    achievements: [
+    // Sourced from the seung-ju-org/brassone repository itself: a pnpm/Turborepo monorepo with
+    // apps/web and apps/admin, shared domain/application/infrastructure packages, and deploys/helm.
+    achievements:
       locale === "ko"
-        ? "Next.js 기반 웹 개발"
+        ? [
+            "사용자 웹과 관리자 화면을 한 모노레포로 구성",
+            "도메인·애플리케이션·인프라 계층을 공용 패키지로 분리",
+            "Docker 이미지와 Helm 차트로 배포 구성"
+          ]
         : locale === "en"
-          ? "Web development with Next.js"
-          : "Next.jsによるWeb開発"
-    ],
-    stack: "Next.js",
+          ? [
+              "Built the customer web and the admin console in one monorepo",
+              "Split domain, application, and infrastructure into shared packages",
+              "Set up delivery with Docker images and Helm charts"
+            ]
+          : [
+              "ユーザー向けWebと管理画面を一つのモノレポで構成",
+              "ドメイン・アプリケーション・インフラを共通パッケージに分離",
+              "DockerイメージとHelmチャートでデプロイを構成"
+            ],
+    stack: "Next.js, React, TypeScript, Prisma, Redis, Docker, Helm",
     links: undefined
   });
   projects.push({
