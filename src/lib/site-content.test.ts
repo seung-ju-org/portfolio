@@ -87,7 +87,7 @@ describe("site content", () => {
     expect(starts).toEqual([...starts].sort((left, right) => right - left));
     for (const locale of ["ko", "en", "ja"] as const) {
       expect(getSiteContent(locale).projects.find((project) => project.id === "brassone")?.period).toBe(
-        "2026.03–2026.06"
+        "2026.03–2026.09"
       );
     }
     expect(getSiteContent("ja").projects.find((project) => project.id === "unicorea-payment")?.period).toBe(

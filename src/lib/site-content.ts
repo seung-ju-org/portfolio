@@ -427,9 +427,10 @@ export function getSiteContent(locale: Locale): SiteContent {
           ? "Daechang Brassone Web Development"
           : "大昌ブラスワンWeb開発",
     company: "크림쿠키스튜디오",
-    // Human commits run 2026-03-25 to 2026-06-25; the 2026-09-05 push was the deploy bot
-    // updating Helm image tags, so the work is not ongoing and the dates need no locale branch.
-    period: "2026.03–2026.06",
+    // Human commits run 2026-03-25 to 2026-09-05 (the newest is "feat: manage annual financial
+    // reports in admin"); only the very last push was the deploy bot. Closed, not ongoing, and
+    // the dates read the same in every locale.
+    period: "2026.03–2026.09",
     role: locale === "ko" ? "웹 개발" : locale === "en" ? "Web development" : "Web開発",
     // Sourced from the seung-ju-org/brassone repository itself: a pnpm/Turborepo monorepo with
     // apps/web and apps/admin, shared domain/application/infrastructure packages, and deploys/helm.
