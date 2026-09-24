@@ -9,6 +9,25 @@ vi.mock("next/navigation", () => ({ usePathname: () => "/en/" }));
 vi.mock("./hero-scene", () => ({ HeroScene: () => null }));
 
 describe("SitePage contact section", () => {
+  it.each(["ko", "en", "ja"] as const)("avoids a duplicate portfolio heading in %s", (locale) => {
+    const { container } = render(<SitePage locale={locale} page="portfolio" content={getSiteContent(locale)} />);
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+    expect(container.querySelector(".work .section-heading")).toBeNull();
+    expect(screen.getByRole("combobox")).toBeInTheDocument();
+  });
+
+  it.each([
+    ["ko", "연락 ↗"],
+    ["en", "Contact ↗"],
+    ["ja", "連絡 ↗"]
+  ] as const)("localizes the contact link in %s", (locale, label) => {
+    render(<SitePage locale={locale} page="contact" content={getSiteContent(locale)} />);
+    expect(screen.getByRole("link", { name: label })).toHaveAttribute(
+      "href",
+      locale === "ko" ? "/contact" : `/${locale}/contact`
+    );
+  });
+
   it("keeps the CONTACT kicker and heading on home, but not on the contact page where the hero already shows it", () => {
     const content = getSiteContent("en");
 
