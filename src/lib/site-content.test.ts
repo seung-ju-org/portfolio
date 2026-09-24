@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { existsSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { getSiteContent } from "@/lib/site-content";
 import { evidenceProjects } from "@/lib/project-evidence";
@@ -99,7 +99,28 @@ describe("site content", () => {
       return counts;
     }, {});
     expect(categories).toEqual({ work: 25, design: 13, archive: 2, opensource: 6 });
-    expect(getSiteContent("ko").projects.filter((project) => project.image)).toHaveLength(18);
+    expect(getSiteContent("ko").projects.filter((project) => project.image)).toHaveLength(20);
+  });
+
+  it("credits related card photos without presenting them as project screenshots", () => {
+    for (const locale of ["ko", "en", "ja"] as const) {
+      for (const id of ["unicorea-payment", "brassone"]) {
+        const image = getSiteContent(locale).projects.find((project) => project.id === id)?.image;
+        expect(image).toMatchObject({ width: 1200, height: 750, fit: "cover" });
+        expect(image?.sourceUrl).toBe(
+          id === "brassone" ? "https://unsplash.com/photos/m_HRfLhgABo" : "https://unsplash.com/photos/XH2JFgT4Abc"
+        );
+        expect(image?.provenance).toContain(
+          locale === "ko"
+            ? "실제 프로젝트 화면 아님"
+            : locale === "en"
+              ? "not a project screenshot"
+              : "実際のプロジェクト画面ではありません"
+        );
+        expect(image?.provenance).toContain("Unsplash");
+        expect(statSync(resolve(process.cwd(), "public", image!.src.slice(1))).size).toBeLessThan(150_000);
+      }
+    }
   });
 
   it("references existing local images", () => {

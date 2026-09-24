@@ -487,6 +487,48 @@ export function getSiteContent(locale: Locale): SiteContent {
     stack: "React, TypeScript, Kotlin, Spring Boot, Jenkins, Kubernetes, Helm, ArgoCD",
     links: undefined
   });
+  const relatedImages = {
+    "unicorea-payment": {
+      file: "unicorea-payment-service.webp",
+      caption: {
+        ko: "비접촉 결제 장면",
+        en: "Contactless payment scene",
+        ja: "非接触決済の場面"
+      },
+      author: "CardMapr.nl",
+      sourceUrl: "https://unsplash.com/photos/XH2JFgT4Abc"
+    },
+    brassone: {
+      file: "brassone-site.webp",
+      caption: {
+        ko: "코드 편집기가 열린 노트북 작업 환경",
+        en: "Laptop workspace with a code editor open",
+        ja: "コードエディタを開いたノートPCの作業環境"
+      },
+      author: "Christopher Gower",
+      sourceUrl: "https://unsplash.com/photos/m_HRfLhgABo"
+    }
+  } as const;
+  for (const project of projects) {
+    const image = relatedImages[project.id as keyof typeof relatedImages];
+    if (!image) continue;
+    project.image = {
+      src: `/images/projects/services/${image.file}`,
+      width: 1200,
+      height: 750,
+      alt: image.caption[locale],
+      caption: image.caption[locale],
+      provenance: `${
+        locale === "ko"
+          ? "관련 사진 · 실제 프로젝트 화면 아님"
+          : locale === "en"
+            ? "Related photo · not a project screenshot"
+            : "関連写真・実際のプロジェクト画面ではありません"
+      } — ${image.author} / Unsplash`,
+      sourceUrl: image.sourceUrl,
+      fit: "cover"
+    };
+  }
   projects.push(...evidenceProjects[locale], ...additionalProjects[locale]);
   const startDate = (period: string) => {
     const match = period.match(/(\d{4})(?:\.(\d{2}))?/);
