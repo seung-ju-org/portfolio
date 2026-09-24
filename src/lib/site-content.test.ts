@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { existsSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { getSiteContent } from "@/lib/site-content";
 import { evidenceProjects } from "@/lib/project-evidence";
@@ -34,6 +34,16 @@ describe("site content", () => {
     expect(projects.find((project) => project.id === "2")?.period).toBe("2023.01 ~ 2023.04");
     expect(projects.find((project) => project.id === "8")).toBeUndefined();
     expect(projects.find((project) => project.id === "10")?.period).toBe("2023.06 ~ 2023.09");
+  });
+
+  it("localizes the capability cards instead of leaving Korean on /en and /ja", () => {
+    for (const locale of ["en", "ja"] as const) {
+      for (const capability of getSiteContent(locale).capabilities) {
+        expect(`${capability.title} ${capability.description}`).not.toMatch(/[가-힣]/);
+      }
+    }
+    expect(getSiteContent("ja").capabilities[0]?.title).toBe("Web・アプリ");
+    expect(getSiteContent("en").capabilities[1]?.description).toBe("Service APIs and data processing");
   });
 
   it("localizes every evidence project without Korean fallback copy", () => {
@@ -75,7 +85,11 @@ describe("site content", () => {
       return match ? Number(match[1]) * 100 + Number(match[2] ?? 0) : 0;
     });
     expect(starts).toEqual([...starts].sort((left, right) => right - left));
-    expect(getSiteContent("en").projects.find((project) => project.id === "brassone")?.period).toBe("2026.03–Present");
+    for (const locale of ["ko", "en", "ja"] as const) {
+      expect(getSiteContent(locale).projects.find((project) => project.id === "brassone")?.period).toBe(
+        "2026.03–2026.09"
+      );
+    }
     expect(getSiteContent("ja").projects.find((project) => project.id === "unicorea-payment")?.period).toBe(
       "2026.04–現在"
     );
@@ -85,7 +99,28 @@ describe("site content", () => {
       return counts;
     }, {});
     expect(categories).toEqual({ work: 25, design: 13, archive: 2, opensource: 6 });
-    expect(getSiteContent("ko").projects.filter((project) => project.image)).toHaveLength(18);
+    expect(getSiteContent("ko").projects.filter((project) => project.image)).toHaveLength(20);
+  });
+
+  it("credits related card photos without presenting them as project screenshots", () => {
+    for (const locale of ["ko", "en", "ja"] as const) {
+      for (const id of ["unicorea-payment", "brassone"]) {
+        const image = getSiteContent(locale).projects.find((project) => project.id === id)?.image;
+        expect(image).toMatchObject({ width: 1200, height: 750, fit: "cover" });
+        expect(image?.sourceUrl).toBe(
+          id === "brassone" ? "https://unsplash.com/photos/m_HRfLhgABo" : "https://unsplash.com/photos/XH2JFgT4Abc"
+        );
+        expect(image?.provenance).toContain(
+          locale === "ko"
+            ? "실제 프로젝트 화면 아님"
+            : locale === "en"
+              ? "not a project screenshot"
+              : "実際のプロジェクト画面ではありません"
+        );
+        expect(image?.provenance).toContain("Unsplash");
+        expect(statSync(resolve(process.cwd(), "public", image!.src.slice(1))).size).toBeLessThan(150_000);
+      }
+    }
   });
 
   it("references existing local images", () => {

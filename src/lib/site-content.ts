@@ -47,6 +47,14 @@ import { evidenceProjects, type ProjectCategory, type ProjectImage } from "./pro
 type Localized<T> = Record<Locale, T>;
 const localized = <T>(ko: T, en: T, ja: T): Localized<T> => ({ ko, en, ja });
 
+// Captions describe the screen a visitor is looking at; where the file came from belongs in provenance.
+const archiveSource = localized("이전 작업 자료", "Earlier work archive", "過去の作業資料");
+const imageCaptions = {
+  "3": localized("SKKU IMBA 웹사이트 화면", "SKKU IMBA website", "SKKU IMBA Webサイト画面"),
+  "7": localized("HomeGrit 모바일 앱 화면", "HomeGrit mobile app", "HomeGritモバイルアプリ画面"),
+  "19": localized("ENSolution 대시보드 화면", "ENSolution dashboard", "ENSolutionダッシュボード画面")
+};
+
 const profile = localized(
   {
     name: "오승주",
@@ -224,7 +232,28 @@ const content: Localized<Omit<SiteContent, "profile">> = {
       "Leading a team taught me that technical judgment requires both breadth and execution: deciding what to choose, how far to implement, when to refactor, and where to improve.",
       "I aim to design structures across technologies, investigate where needed, and complete services end to end."
     ],
-    capabilities: [],
+    capabilities: [
+      {
+        title: "Web & App",
+        description: "Product development for both user and operator experience",
+        skills: ["React", "Next.js", "React Native", "TypeScript"]
+      },
+      {
+        title: "Backend",
+        description: "Service APIs and data processing",
+        skills: ["Kotlin", "Spring Boot", "Node.js", "NestJS"]
+      },
+      {
+        title: "Infrastructure & Operations",
+        description: "Deployment and observability environments",
+        skills: ["AWS", "Kubernetes", "Jenkins", "Helm", "ArgoCD", "Prometheus"]
+      },
+      {
+        title: "Technical Leadership",
+        description: "Project leadership and development process management",
+        skills: ["Project Management", "Technical Leadership", "Git", "CI/CD"]
+      }
+    ],
     careers: [],
     education: [],
     projects: []
@@ -239,7 +268,28 @@ const content: Localized<Omit<SiteContent, "profile">> = {
       "チーム長として、技術判断には広い視野と実行力が必要だと学びました。技術選択、実装範囲、リファクタリングの時機、改善箇所を判断し、実装まで担ってきました。",
       "複数の技術をつないで構造を設計し、必要な箇所を深く解決し、サービスを最後まで完成させる開発者を目指しています。"
     ],
-    capabilities: [],
+    capabilities: [
+      {
+        title: "Web・アプリ",
+        description: "ユーザーと運用者体験のためのプロダクト開発",
+        skills: ["React", "Next.js", "React Native", "TypeScript"]
+      },
+      {
+        title: "バックエンド",
+        description: "サービスAPIとデータ処理",
+        skills: ["Kotlin", "Spring Boot", "Node.js", "NestJS"]
+      },
+      {
+        title: "インフラ・運用",
+        description: "デプロイと監視環境",
+        skills: ["AWS", "Kubernetes", "Jenkins", "Helm", "ArgoCD", "Prometheus"]
+      },
+      {
+        title: "技術リーダーシップ",
+        description: "プロジェクトリードと開発プロセス管理",
+        skills: ["Project Management", "Technical Leadership", "Git", "CI/CD"]
+      }
+    ],
     careers: [],
     education: [],
     projects: []
@@ -251,7 +301,9 @@ function translate(locale: Exclude<Locale, "ko">): Omit<SiteContent, "profile" |
     locale === "en" ? " (See Korean page for detailed history.)" : "（詳細な経歴は韓国語ページをご覧ください。）";
   return {
     ...content.ko,
-    capabilities: content.ko.capabilities.map((item) => ({ ...item })),
+    // Careers carry the suffix because they stay Korean on purpose; capabilities are four short
+    // labels, so they are translated outright rather than left as Korean without a notice.
+    capabilities: content[locale].capabilities.map((item) => ({ ...item })),
     careers: content.ko.careers.map((item) => ({ ...item, summary: `${item.summary}${suffix}` })),
     education: content.ko.education.map((item) => ({ ...item })),
     projects: content.ko.projects.map((item) => ({ ...item }))
@@ -300,24 +352,21 @@ export function getSiteContent(locale: Locale): SiteContent {
       src: "/images/projects/services/bankmall-archived-portfolio.webp",
       width: 1200,
       height: 676,
+      // Alt describes the screen, same as the caption. Where the file came from is in provenance;
+      // leaving it here would read the sourcing note aloud to screen reader users only.
       alt:
         locale === "ko"
-          ? "이전 포트폴리오의 뱅크몰 대출 비교 웹 화면"
+          ? "데스크톱 모니터에 띄운 뱅크몰 대출 비교 웹 화면"
           : locale === "en"
-            ? "Bankmall web experience on a desktop monitor from an earlier portfolio"
-            : "以前のポートフォリオに掲載されたBankmallローン比較Web画面",
+            ? "Bankmall loan comparison web screen on a desktop monitor"
+            : "デスクトップモニターに表示されたBankmallローン比較Web画面",
       caption:
         locale === "ko"
-          ? "이전 포트폴리오 수록 화면"
+          ? "뱅크몰 대출 비교 웹 화면"
           : locale === "en"
-            ? "Archived portfolio screen"
-            : "以前のポートフォリオ掲載画面",
-      provenance:
-        locale === "ko"
-          ? "이전 포트폴리오 PDF"
-          : locale === "en"
-            ? "Archived portfolio PDF"
-            : "以前のポートフォリオPDF",
+            ? "Bankmall loan comparison web"
+            : "Bankmallローン比較Web画面",
+      provenance: archiveSource[locale],
       fit: "contain"
     };
     projects.splice(bankmallWebIndex, 1);
@@ -325,11 +374,11 @@ export function getSiteContent(locale: Locale): SiteContent {
   const serviceImages = {
     "3": [
       "/images/projects/services/skku-imba-archived-portfolio.webp",
-      "SKKU IMBA website displayed on a desktop monitor, from an earlier portfolio."
+      "SKKU IMBA website displayed on a desktop monitor."
     ],
     "7": [
       "/images/projects/services/homegrit-archived-portfolio.webp",
-      "Two HomeGrit mobile app screens, from an earlier portfolio."
+      "Two HomeGrit mobile app screens side by side."
     ],
     "19": [
       "/images/projects/services/ensolution-dashboard.webp",
@@ -346,41 +395,26 @@ export function getSiteContent(locale: Locale): SiteContent {
       alt:
         locale === "ko"
           ? project.id === "3"
-            ? "이전 포트폴리오의 SKKU IMBA 웹사이트 화면"
+            ? "데스크톱 모니터에 띄운 SKKU IMBA 웹사이트 화면"
             : project.id === "7"
-              ? "이전 포트폴리오의 HomeGrit 모바일 앱 화면"
-              : "ENSolution 공개 대시보드 이미지"
+              ? "나란히 놓인 HomeGrit 모바일 앱 화면 두 개"
+              : "ENSolution 대시보드 화면"
           : locale === "ja"
             ? project.id === "3"
-              ? "以前のポートフォリオに掲載されたSKKU IMBA Webサイト画面"
+              ? "デスクトップモニターに表示されたSKKU IMBA Webサイト画面"
               : project.id === "7"
-                ? "以前のポートフォリオに掲載されたHomeGritモバイルアプリ画面"
-                : "ENSolution公開ダッシュボード画像"
+                ? "並べて表示されたHomeGritモバイルアプリ画面2つ"
+                : "ENSolutionダッシュボード画面"
             : image[1],
-      caption:
-        locale === "ko"
-          ? project.id === "19"
-            ? "2026년 확인한 공개 서비스 이미지"
-            : "이전 포트폴리오 수록 화면"
-          : locale === "ja"
-            ? project.id === "19"
-              ? "2026年に確認した公開サービス画像"
-              : "以前のポートフォリオ掲載画面"
-            : project.id === "19"
-              ? "Current public service image, viewed 2026-09-23"
-              : "Archived portfolio screen",
+      caption: imageCaptions[project.id as keyof typeof imageCaptions][locale],
       provenance:
-        locale === "ko"
-          ? project.id === "19"
+        project.id === "19"
+          ? locale === "ko"
             ? "ENSolution 공개 사이트"
-            : "이전 포트폴리오 PDF"
-          : locale === "ja"
-            ? project.id === "19"
+            : locale === "ja"
               ? "ENSolution公開サイト"
-              : "以前のポートフォリオPDF"
-            : project.id === "19"
-              ? "ENSolution public site"
-              : "Archived portfolio PDF",
+              : "ENSolution public site"
+          : archiveSource[locale],
       fit: "contain"
     };
   }
@@ -393,16 +427,32 @@ export function getSiteContent(locale: Locale): SiteContent {
           ? "Daechang Brassone Web Development"
           : "大昌ブラスワンWeb開発",
     company: "크림쿠키스튜디오",
-    period: locale === "ko" ? "2026.03–현재" : locale === "ja" ? "2026.03–現在" : "2026.03–Present",
+    // Human commits run 2026-03-25 to 2026-09-05 (the newest is "feat: manage annual financial
+    // reports in admin"); only the very last push was the deploy bot. Closed, not ongoing, and
+    // the dates read the same in every locale.
+    period: "2026.03–2026.09",
     role: locale === "ko" ? "웹 개발" : locale === "en" ? "Web development" : "Web開発",
-    achievements: [
+    // Sourced from the seung-ju-org/brassone repository itself: a pnpm/Turborepo monorepo with
+    // apps/web and apps/admin, shared domain/application/infrastructure packages, and deploys/helm.
+    achievements:
       locale === "ko"
-        ? "Next.js 기반 웹 개발"
+        ? [
+            "사용자 웹과 관리자 화면을 한 모노레포로 구성",
+            "도메인·애플리케이션·인프라 계층을 공용 패키지로 분리",
+            "Docker 이미지와 Helm 차트로 배포 구성"
+          ]
         : locale === "en"
-          ? "Web development with Next.js"
-          : "Next.jsによるWeb開発"
-    ],
-    stack: "Next.js",
+          ? [
+              "Built the customer web and the admin console in one monorepo",
+              "Split domain, application, and infrastructure into shared packages",
+              "Set up delivery with Docker images and Helm charts"
+            ]
+          : [
+              "ユーザー向けWebと管理画面を一つのモノレポで構成",
+              "ドメイン・アプリケーション・インフラを共通パッケージに分離",
+              "DockerイメージとHelmチャートでデプロイを構成"
+            ],
+    stack: "Next.js, React, TypeScript, Prisma, Redis, Docker, Helm",
     links: undefined
   });
   projects.push({
@@ -416,16 +466,69 @@ export function getSiteContent(locale: Locale): SiteContent {
     company: locale === "ko" ? "유니코아" : "Unicorea",
     period: locale === "ko" ? "2026.04–현재" : locale === "ja" ? "2026.04–現在" : "2026.04–Present",
     role: locale === "ko" ? "Full-Stack Engineer" : "Full-Stack Engineer",
-    achievements: [
+    achievements:
       locale === "ko"
-        ? "가맹점 웹, 정산 API, 공통 배포·운영 환경 개발"
+        ? [
+            "React·TypeScript 기반 가맹점 웹과 관리자 기능 개발",
+            "Kotlin·Spring Boot 기반 정산·통계 API와 데이터 처리",
+            "Jenkins·Kubernetes·Helm·ArgoCD 기반 공통 배포 환경 구성"
+          ]
         : locale === "en"
-          ? "Developing merchant web, settlement APIs, and shared deployment operations"
-          : "加盟店Web、精算API、共通デプロイ・運用環境を開発"
-    ],
-    stack: "React, TypeScript, Kotlin, Spring Boot, Kubernetes",
+          ? [
+              "Merchant web and admin features built with React and TypeScript",
+              "Settlement and statistics APIs and data processing on Kotlin and Spring Boot",
+              "Shared deployment environment on Jenkins, Kubernetes, Helm, and ArgoCD"
+            ]
+          : [
+              "React・TypeScriptによる加盟店Webと管理機能の開発",
+              "Kotlin・Spring Bootによる精算・統計APIとデータ処理",
+              "Jenkins・Kubernetes・Helm・ArgoCDによる共通デプロイ環境の構築"
+            ],
+    stack: "React, TypeScript, Kotlin, Spring Boot, Jenkins, Kubernetes, Helm, ArgoCD",
     links: undefined
   });
+  const relatedImages = {
+    "unicorea-payment": {
+      file: "unicorea-payment-service.webp",
+      caption: {
+        ko: "비접촉 결제 장면",
+        en: "Contactless payment scene",
+        ja: "非接触決済の場面"
+      },
+      author: "CardMapr.nl",
+      sourceUrl: "https://unsplash.com/photos/XH2JFgT4Abc"
+    },
+    brassone: {
+      file: "brassone-site.webp",
+      caption: {
+        ko: "코드 편집기가 열린 노트북 작업 환경",
+        en: "Laptop workspace with a code editor open",
+        ja: "コードエディタを開いたノートPCの作業環境"
+      },
+      author: "Christopher Gower",
+      sourceUrl: "https://unsplash.com/photos/m_HRfLhgABo"
+    }
+  } as const;
+  for (const project of projects) {
+    const image = relatedImages[project.id as keyof typeof relatedImages];
+    if (!image) continue;
+    project.image = {
+      src: `/images/projects/services/${image.file}`,
+      width: 1200,
+      height: 750,
+      alt: image.caption[locale],
+      caption: image.caption[locale],
+      provenance: `${
+        locale === "ko"
+          ? "관련 사진 · 실제 프로젝트 화면 아님"
+          : locale === "en"
+            ? "Related photo · not a project screenshot"
+            : "関連写真・実際のプロジェクト画面ではありません"
+      } — ${image.author} / Unsplash`,
+      sourceUrl: image.sourceUrl,
+      fit: "cover"
+    };
+  }
   projects.push(...evidenceProjects[locale], ...additionalProjects[locale]);
   const startDate = (period: string) => {
     const match = period.match(/(\d{4})(?:\.(\d{2}))?/);

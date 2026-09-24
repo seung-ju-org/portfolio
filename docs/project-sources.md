@@ -59,3 +59,12 @@ Three archive cards are omitted: `기술자들` has conflicting title/prose/imag
 | `/images/projects/archive/prismabook-portfolio-2020-still.webp` (1000×632) | Prismabook prototype | Authentic still extracted from `portfolio-2020` at commit [`c5e982c024136eae1541bb69e987c486aa5e1450`](https://github.com/seung-juv/portfolio-2020/blob/c5e982c024136eae1541bb69e987c486aa5e1450/src/Assets/Thumb/thumb-prismabook.mov), `src/Assets/Thumb/thumb-prismabook.mov`. Historical prototype artifact; not a current capture. |
 
 Other public personal repositories were reviewed and omitted when they are forks, tutorials, coding exercises, framework templates, small experiments, empty repositories, or lack enough public product/design evidence. Public organization identity `unicoredevelop` is recorded only as its public name (`유니코아&디코코`) and public `unicore-stack` repository; this ledger does not state private membership roles or an employment relationship.
+
+## Related service-card photos (2026-09-24)
+
+These are related stock photos, not actual project screenshots. The visible provenance explicitly states this in Korean, English, and Japanese.
+
+- `unicorea-payment-service.webp`: [CardMapr.nl / Unsplash](https://unsplash.com/photos/XH2JFgT4Abc), contactless payment scene.
+- `brassone-site.webp`: [Christopher Gower / Unsplash](https://unsplash.com/photos/m_HRfLhgABo), laptop workspace with a code editor open.
+
+Design supplied 1200×750 PNG originals; encoded as WebP quality 80, displayed with `cover`, each under 150,000 bytes. [Unsplash License](https://unsplash.com/license) allows free commercial and non-commercial use without required permission or attribution; credits are retained. These photos do not claim client affiliation or depict the delivered products. Prefer verified public project screenshots if they become available.

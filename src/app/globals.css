@@ -485,6 +485,11 @@ select:focus-visible {
   color: #c9c4ba;
   font-size: 0.72rem;
 }
+/* Without a cover image the card runs short, and bottom-aligning the stack line opens a gap
+   between it and the copy above. Keep the text block together instead. */
+.project:not(:has(.project-media)) small {
+  margin-top: 12px;
+}
 .project > a {
   margin-top: 13px;
   font-size: 0.76rem;
@@ -556,6 +561,14 @@ footer {
   letter-spacing: 0.08em;
 }
 @media (max-width: 760px) {
+  /* The nav pill is fixed 12px from the bottom and 48px tall, so anything that ends at the
+     document or anchor bottom lands underneath it. Keep that band clear. */
+  html {
+    scroll-padding-bottom: 60px;
+  }
+  body {
+    padding-bottom: 60px;
+  }
   .site-header {
     top: auto;
     bottom: 12px;
